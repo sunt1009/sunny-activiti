@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/sunny-activiti?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true&useAffectedRows=true&nullCatalogMeansCurrent=true
+    username: root
+    password: admin1009
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 50 # 连接池最大连接数，默认是10
+      minimum-idle: 5 #最小空闲连接数量
+      idle-timeout: 18000 #空闲连接存活最大时间，默认600000（10分钟）
+      pool-name: sunnyHikariCP  #连接池名称
+      connection-test-query: SELECT 1

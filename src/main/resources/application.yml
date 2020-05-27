@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: sunny-activiti
+  profiles:
+    active: dev
+  activiti:
+    check-process-definitions: false #关闭验证自动部署
+
