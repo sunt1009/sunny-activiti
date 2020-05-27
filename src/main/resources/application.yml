@@ -5,4 +5,6 @@ spring:
     active: dev
   activiti:
     check-process-definitions: false #关闭验证自动部署
-
+  thymeleaf:
+    mode: LEGACYHTML5 #声明为非严格的HTML5格式
+    cache: false

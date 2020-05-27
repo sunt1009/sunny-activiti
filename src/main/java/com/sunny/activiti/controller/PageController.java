@@ -26,15 +26,6 @@ public class PageController {
         return page;
     }
 
-    /**
-     * 订单相关页面跳转
-     * @param page
-     * @return
-     */
-    @GetMapping("/order/{page}")
-    public String toOrdPage(@PathVariable String page) {
-        return "order/" + page;
-    }
 
     /**
      * 跳转流程相关页面
@@ -46,23 +37,4 @@ public class PageController {
         return "model/" + page;
     }
 
-    /**
-     * 跳转商品相关页面
-     * @param page
-     * @return
-     */
-    @GetMapping("/goods/{page}")
-    public String toGoodsPage(@PathVariable String page) {
-        return "goods/" + page;
-    }
-
-    /**
-     * 跳转测试相关页面
-     * @param page
-     * @return
-     */
-    @GetMapping("/test/{page}")
-    public String toTestPage(@PathVariable String page) {
-        return "test/" + page;
-    }
 }
