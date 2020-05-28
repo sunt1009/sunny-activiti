@@ -1,11 +1,14 @@
 package com.sunny.activiti.controller;
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sunny.activiti.common.entity.ResponseResult;
 import com.sunny.activiti.common.entity.ResponseUtil;
 import com.sunny.activiti.common.entity.ResultCode;
+import com.sunny.activiti.service.IProcesService;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
@@ -17,6 +20,7 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.impl.interceptor.Command;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
@@ -45,7 +49,7 @@ public class ActivitiModelController {
     @Autowired
     private RepositoryService repositoryService;
     @Autowired
-    private ManagementService managementService;
+    private IProcesService procesService;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -179,5 +183,17 @@ public class ActivitiModelController {
         }
         repositoryService.deleteModel(modelId);
         return ResponseUtil.makeOKRsp("删除流程成功!");
+    }
+
+    /**
+     * 启动流程
+     * @param request
+     * @return
+     */
+    @RequestMapping("startProcess")
+    public ResponseResult<String> startProcess(HttpServletRequest request) {
+        String defKey = request.getParameter("defKey");
+        ProcessInstance processInstance = procesService.startProcessInstanceByKey(defKey, IdUtil.fastSimpleUUID());
+        return ResponseUtil.makeOKRsp(JSONUtil.toJsonStr(processInstance));
     }
 }

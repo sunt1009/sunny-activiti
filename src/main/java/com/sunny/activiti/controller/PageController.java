@@ -1,8 +1,11 @@
 package com.sunny.activiti.controller;
 
+import cn.hutool.core.util.StrUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import java.io.File;
 
 /**
  * @ClassName: PageController
@@ -15,6 +18,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class PageController {
 
     /**
+     * 首页
+     * @return
+     */
+    @GetMapping("/")
+    public String toIndexPage() {
+        return "index";
+    }
+
+    /**
      * @return java.lang.String
      * @Author sunt
      * @Description 跟路径跳转
@@ -23,6 +35,9 @@ public class PageController {
      **/
     @GetMapping("/{page}")
     public String toPage(@PathVariable String page) {
+        if(StrUtil.equals("favicon.ico",page)) {
+            return "favicon";
+        }
         return page;
     }
 
