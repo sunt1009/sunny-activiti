@@ -52,4 +52,14 @@ public class PageController {
         return "model/" + page;
     }
 
+    /**
+     * 跳转其他相关页面
+     * @param page
+     * @return
+     */
+    @GetMapping("/page/{page}")
+    public String toOtherPage(@PathVariable String page) {
+        return "page/" + page;
+    }
+
 }

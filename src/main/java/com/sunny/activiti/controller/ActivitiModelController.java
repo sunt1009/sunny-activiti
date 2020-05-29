@@ -6,6 +6,7 @@ import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sunny.activiti.common.entity.ResponseResult;
+import com.sunny.activiti.common.entity.ResponseTableResult;
 import com.sunny.activiti.common.entity.ResponseUtil;
 import com.sunny.activiti.common.entity.ResultCode;
 import com.sunny.activiti.service.IProcesService;
@@ -94,9 +95,13 @@ public class ActivitiModelController {
      * @return
      */
     @RequestMapping("queryModelList")
-    public ResponseResult<List<Model>> queryModelList() {
-        List<Model> list = repositoryService.createModelQuery().orderByCreateTime().desc().list();
-        return ResponseUtil.makeOKRsp(list);
+    public ResponseTableResult<List<Model>> queryModelList(HttpServletRequest request) {
+        int pageNo = Integer.valueOf(request.getParameter("page"));
+        int pageSize = Integer.valueOf(request.getParameter("limit"));
+        int firstResult = (pageNo-1)*pageSize;
+        long count = repositoryService.createModelQuery().count();
+        List<Model> list = repositoryService.createModelQuery().orderByCreateTime().desc().listPage(firstResult,pageSize);
+        return ResponseUtil.makeTableRsp(0,count,list);
     }
 
     /**

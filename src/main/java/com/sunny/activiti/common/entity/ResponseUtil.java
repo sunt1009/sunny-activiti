@@ -15,11 +15,19 @@ public class ResponseUtil {
         return new ResponseResult<T>().setCode(ResultCode.SUCCESS).setMsg(SUCC_MSG);
     }
 
+    public static <T> ResponseResult<T> makeOKRsp(int code,T data) {
+        return new ResponseResult<T>().setCode(code).setMsg(SUCC_MSG).setData(data);
+    }
+
     public static <T> ResponseResult<T> makeOKRsp(T data) {
         return new ResponseResult<T>().setCode(ResultCode.SUCCESS).setMsg(SUCC_MSG).setData(data);
     }
 
     public static <T> ResponseResult<T> makeErrRsp(int code, String msg) {
         return new ResponseResult<T>().setCode(code).setMsg(msg);
+    }
+
+    public static <T> ResponseTableResult<T> makeTableRsp(int code,long count,T data) {
+        return new ResponseTableResult<T>().setCode(code).setCount(count).setMsg(SUCC_MSG).setData(data);
     }
 }
