@@ -191,6 +191,26 @@ public class ActivitiModelController {
     }
 
     /**
+     * 复制流程
+     * @param modelId
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    @RequestMapping("copyModel")
+    public void copyModel(String modelId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Model modelData = repositoryService.newModel();
+        Model oldModel = repositoryService.getModel(modelId);
+        modelData.setName(oldModel.getName() + "-复制");
+        modelData.setKey(oldModel.getKey());
+        modelData.setMetaInfo(oldModel.getMetaInfo());
+        repositoryService.saveModel(modelData);
+        repositoryService.addModelEditorSource(modelData.getId(), this.repositoryService.getModelEditorSource(oldModel.getId()));
+        repositoryService.addModelEditorSourceExtra(modelData.getId(), this.repositoryService.getModelEditorSourceExtra(oldModel.getId()));
+        response.sendRedirect(request.getContextPath() + "/modeler.html?modelId=" + modelData.getId());
+    }
+
+    /**
      * 启动流程
      * @param request
      * @return

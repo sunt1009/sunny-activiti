@@ -41,22 +41,9 @@ layui.use(['form','table'],function () {
     table.on('tool(currentTableFilter)', function (obj) {
         var data = obj.data;
         if (obj.event === 'edit') {
-
-            var index = layer.open({
-                title: '编辑用户',
-                type: 2,
-                shade: 0.2,
-                maxmin:true,
-                shadeClose: true,
-                area: ['100%', '100%'],
-                content: '../page/table/edit.html',
-            });
-            $(window).on("resize", function () {
-                layer.full(index);
-            });
-            return false;
+            openWin('/modeler.html?modelId=' + data.id,'编辑流程',null);
         } else if (obj.event === 'copy') {  // 监听复制操作
-            layer.alert(1111);
+            openWin("/model/copyModel?modelId="+ data.id,'复制流程',null);
         }else if (obj.event === 'deploy') {  // 监听部署操作
             layer.confirm('确定部署么', function (index) {
                 var modelId = data.id;
@@ -87,9 +74,33 @@ layui.use(['form','table'],function () {
                 });
             });
         } else if (obj.event === 'delete') {
-            layer.confirm('真的删除行么', function (index) {
-                layer.alert(data.id);
-                layer.close(index);
+            layer.confirm('确定删除行么', function (index) {
+                var modelId = data.id;
+                $.ajax({
+                    beforeSend: function() {
+                        layer.load(2);
+                    },
+                    type: 'GET',
+                    url: '/model/delModel',
+                    data: {
+                        modelId: modelId
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        if(res.code == 200) {
+                            layer.msg(res.msg, { icon: 1 ,time: 1000});
+                            table.reload('currentTableId');
+                        }else {
+                            layer.msg(res.msg, {icon: 5, time: 2000});
+                        }
+                    },
+                    complete: function() {
+                        layer.closeAll("loading");
+                    },
+                    error: function() {
+                        layer.msg('系统繁忙请稍后重试', {icon: 5, time: 2000});
+                    }
+                });
             });
         }
     });
@@ -98,7 +109,6 @@ layui.use(['form','table'],function () {
 
 
 function addModel() {
-  //  window.open("/model/createModel?key=&name=name&description=description");
    openWin('/model/createModel?key=&name=name&description=description','创建流程',null);
 }
 
