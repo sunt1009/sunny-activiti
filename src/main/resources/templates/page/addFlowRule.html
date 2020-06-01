@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>新建流程规则</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label required">规则名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="ruleName" lay-verify="required" lay-reqtext="请输入规则名称" placeholder="请输入规则名称" value="" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">业务流程</label>
+        <div class="layui-input-block" lay-verify-msg="请选择业务流程" lay-verify="mustRadio">
+            <input th:each="flowDef:${flowDefList}" type="radio" name="defId" th:title="${flowDef.flowName}" th:value="${flowDef.defId}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">系统来源</label>
+        <div class="layui-input-block" lay-verify-msg="请选择系统来源" lay-verify="mustcheck">
+            <input th:each="system:${systemList}" type="checkbox" name="systemId" th:title="${system.dictName}" th:value="${system.dictValue}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">业务类型</label>
+        <div class="layui-input-block" lay-verify-msg="请选择业务类型" lay-verify="mustcheck">
+            <input th:each="system:${busitypeList}" type="checkbox" name="busiType" th:title="${system.dictName}" th:value="${system.dictValue}">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">规则描述</label>
+        <div class="layui-input-block">
+            <textarea name="ruleDesc" class="layui-textarea" placeholder="请输入规则描述"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">提交</button>
+        </div>
+    </div>
+</div>
+<script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$;
+        //自定义验证规则
+        form.verify({
+            mustcheck: function (value, item) { //复选框必选
+                var xname = $(item).attr("id")
+                var va = $(item).find("input[type='checkbox']:checked").val();
+                if (typeof (va) == "undefined") {
+                    return $(item).attr("lay-verify-msg");
+                }
+            },
+            mustRadio: function (value, item) { //单选必选
+            var xname = $(item).attr("id")
+            var va = $(item).find("input[type='radio']:checked").val();
+            if (typeof (va) == "undefined") {
+                return $(item).attr("lay-verify-msg");
+            }
+        },
+        });
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            var systemIds = [];
+            $("input:checkbox[name='systemId']:checked").each(function() {
+                systemIds.push($(this).val());
+            });
+            var busiTypes = [];
+            $("input:checkbox[name='busiType']:checked").each(function() {
+                busiTypes.push($(this).val());
+            });
+
+            var params = {
+                'defId': $("input[name=defId]:checked").val(),
+                'defName': $("input[name=defId]:checked").attr('title'),
+                'ruleName': $('input[name="ruleName"]').val(),
+                'systemIds': systemIds,
+                'busiTypes':  busiTypes,
+                'ruleDesc': $('textarea[name="ruleDesc"]').val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                beforeSend: function() {
+                    layer.load(2);
+                },
+                url: '/flow/submitFlowRule',
+                data: JSON.stringify(params),
+                dataType: 'JSON',
+                contentType: 'application/json; charset=UTF-8',
+                success: function (res) {
+                    if(res.code == '200') {
+                        layer.msg(res.msg, { icon: 1 ,time: 1000},function () {
+                            var iframeIndex = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(iframeIndex);
+                            parent.layer.reload();
+                        });
+                    }else {
+                        layer.msg(res.msg, {icon: 5, time: 2000});
+                    }
+                }, complete: function() {
+                    layer.closeAll("loading");
+                },
+                error: function() {
+                    layer.msg('系统繁忙请稍后重试', {icon: 5, time: 2000});
+                }
+            });
+
+
+
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

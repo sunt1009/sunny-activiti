@@ -3,9 +3,11 @@ package com.sunny.activiti.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sunny.activiti.common.util.TreeUtil;
 import com.sunny.activiti.entity.MenuVo;
+import com.sunny.activiti.entity.SysDict;
 import com.sunny.activiti.entity.SystemMenu;
+import com.sunny.activiti.mapper.SysDictMapper;
 import com.sunny.activiti.mapper.SystemMenuMapper;
-import com.sunny.activiti.service.ISysMenuService;
+import com.sunny.activiti.service.ISystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +24,12 @@ import java.util.Map;
  * @Version 1.0
  **/
 @Service
-public class SysMenuServiceImpl implements ISysMenuService {
+public class SystemServiceImpl implements ISystemService {
 
     @Autowired
     private SystemMenuMapper systemMenuMapper;
+    @Autowired
+    private SysDictMapper sysDictMapper;
 
     @Override
     public Map<String, Object> queryMenuList() {
@@ -59,5 +63,10 @@ public class SysMenuServiceImpl implements ISysMenuService {
         map.put("homeInfo", home);
         map.put("logoInfo", logo);
         return map;
+    }
+
+    @Override
+    public List<SysDict> querySysDictInfo(String dictTypeCode) {
+        return sysDictMapper.querySysDictInfo(dictTypeCode);
     }
 }

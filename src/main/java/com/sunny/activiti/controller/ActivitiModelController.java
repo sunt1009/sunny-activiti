@@ -9,10 +9,13 @@ import com.sunny.activiti.common.entity.ResponseResult;
 import com.sunny.activiti.common.entity.ResponseTableResult;
 import com.sunny.activiti.common.entity.ResponseUtil;
 import com.sunny.activiti.common.entity.ResultCode;
+import com.sunny.activiti.entity.FlowDef;
+import com.sunny.activiti.service.IFlowInfoService;
 import com.sunny.activiti.service.IProcesService;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.bpmn.model.Process;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.ActivitiException;
@@ -53,6 +56,8 @@ public class ActivitiModelController {
     private IProcesService procesService;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private IFlowInfoService flowInfoService;
 
     /**
      * 新建流程
@@ -170,6 +175,15 @@ public class ActivitiModelController {
             modelData.setDeploymentId(deployment.getId());
             repositoryService.saveModel(modelData);
             redirectAttributes.addFlashAttribute("message", "部署成功，部署ID=" + deployment.getId());
+            //向流程定义表保存数据
+            FlowDef flowDef = new FlowDef();
+            List<Process> processes = model.getProcesses();
+            for (Process process : processes) {
+                flowDef.setFlowCode(process.getId());
+                flowDef.setFlowName(process.getName());
+            }
+            flowInfoService.insertFlowDef(flowDef);
+
             return ResponseUtil.makeOKRsp("部署成功");
         }
         return ResponseUtil.makeErrRsp(ResultCode.NOT_FOUND.code,"系统异常,流程ID不存在");
