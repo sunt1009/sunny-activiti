@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>请假申请</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 请假申请 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="vacationTable" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            {{#if(d.vacationState ==0){ }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs data-count-delete" lay-event="submit">提交申请</a>
+                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs data-count-delete" lay-event="del">删除</a>
+            {{#}if(d.vacationState ==1) { }}
+                 <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="examine">审批查询</a>
+            {{#}if(d.vacationState ==2) {}}
+                <a class="layui-btn layui-btn-danger layui-btn-xs data-count-delete" lay-event="delete">删除</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="examine">审批查询</a>
+            {{#}if(d.vacationState ==3) { }}
+              <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="examine">审批查询</a>
+            {{#}
+            }}
+        </script>
+
+    </div>
+</div>
+<script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../js/js-vacation.js" charset="utf-8"></script>
+</body>
+</html>

@@ -19,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: TestJson
@@ -56,7 +58,10 @@ public class TestActiviti {
      */
     @Test
     public void startProces() {
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("SH-PROCESS", IdUtil.fastSimpleUUID());
+       // ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("SH-PROCESS", IdUtil.fastSimpleUUID());
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("user","user-001");
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("TEST-FLOW-CALL", IdUtil.simpleUUID(), variables);
         log.info("部署ID:{},流程定义KEY:{}",processInstance.getDeploymentId(),processInstance.getProcessDefinitionKey());
     }
 
@@ -65,7 +70,7 @@ public class TestActiviti {
      */
     @Test
     public void queryMyTask() {
-        String assign = "王五";
+        String assign = "user-001";
         List<Task> list = taskService.createTaskQuery().taskAssignee(assign).list();
         if(IterUtil.isNotEmpty(list)) {
             for (Task task : list) {

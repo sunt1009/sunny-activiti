@@ -22,5 +22,5 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
      * @return
      */
     @Select("SELECT t1.*,t2.DICT_TYPE_NAME from sys_dict t1,sys_dict_type t2 WHERE t1.DICT_TYPE_CODE = t2.DICT_TYPE_CODE and t1.DICT_TYPE_CODE = #{dictTypeCode}")
-    List<SysDict> querySysDictInfo(String dictTypeCode);
+    List<SysDict> querySysDictInfo(int dictTypeCode);
 }

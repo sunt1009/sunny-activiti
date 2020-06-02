@@ -66,7 +66,7 @@ public class SystemServiceImpl implements ISystemService {
     }
 
     @Override
-    public List<SysDict> querySysDictInfo(String dictTypeCode) {
+    public List<SysDict> querySysDictInfo(int dictTypeCode) {
         return sysDictMapper.querySysDictInfo(dictTypeCode);
     }
 }

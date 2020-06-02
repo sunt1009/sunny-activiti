@@ -110,7 +110,8 @@
                         layer.msg(res.msg, { icon: 1 ,time: 1000},function () {
                             var iframeIndex = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(iframeIndex);
-                            parent.layer.reload();
+                            //刷新父页面的table
+                            parent.layui.table.reload('flowRuleTable');
                         });
                     }else {
                         layer.msg(res.msg, {icon: 5, time: 2000});

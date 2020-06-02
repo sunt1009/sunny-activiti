@@ -9,6 +9,7 @@ import com.sunny.activiti.common.entity.ResponseResult;
 import com.sunny.activiti.common.entity.ResponseTableResult;
 import com.sunny.activiti.common.entity.ResponseUtil;
 import com.sunny.activiti.common.entity.ResultCode;
+import com.sunny.activiti.common.flow.cmd.HistoryProcessInstanceDiagramCmd;
 import com.sunny.activiti.entity.FlowDef;
 import com.sunny.activiti.service.IFlowInfoService;
 import com.sunny.activiti.service.IProcesService;
@@ -31,6 +32,7 @@ import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -45,7 +47,7 @@ import java.util.List;
  * @Author: sunt
  * @Date: 2019/7/211:07
  **/
-@RestController
+@Controller
 @RequestMapping("model")
 @Slf4j
 public class ActivitiModelController {
@@ -58,6 +60,8 @@ public class ActivitiModelController {
     private ObjectMapper objectMapper;
     @Autowired
     private IFlowInfoService flowInfoService;
+    @Autowired
+    private ManagementService managementService;
 
     /**
      * 新建流程
@@ -100,6 +104,7 @@ public class ActivitiModelController {
      * @return
      */
     @RequestMapping("queryModelList")
+    @ResponseBody
     public ResponseTableResult<List<Model>> queryModelList(HttpServletRequest request) {
         int pageNo = Integer.valueOf(request.getParameter("page"));
         int pageSize = Integer.valueOf(request.getParameter("limit"));
@@ -161,6 +166,7 @@ public class ActivitiModelController {
      * @throws IOException
      */
     @RequestMapping(value = "deployModel")
+    @ResponseBody
     public ResponseResult<String> deployModel(HttpServletRequest request, RedirectAttributes redirectAttributes) throws IOException {
         String modelId = request.getParameter("modelId");
         if (StringUtils.isNoneBlank(modelId)) {
@@ -195,6 +201,7 @@ public class ActivitiModelController {
      * @return
      */
     @RequestMapping("delModel")
+    @ResponseBody
     public ResponseResult<String> delModel(HttpServletRequest request) {
         String modelId = request.getParameter("modelId");
         if(StrUtil.isBlank(modelId)) {
@@ -230,9 +237,41 @@ public class ActivitiModelController {
      * @return
      */
     @RequestMapping("startProcess")
+    @ResponseBody
     public ResponseResult<String> startProcess(HttpServletRequest request) {
         String defKey = request.getParameter("defKey");
         ProcessInstance processInstance = procesService.startProcessInstanceByKey(defKey, IdUtil.fastSimpleUUID());
         return ResponseUtil.makeOKRsp(JSONUtil.toJsonStr(processInstance));
     }
+
+    /**
+     * 流程图查询
+     * @param request
+     */
+    @RequestMapping("queryFlowImg")
+    public void queryFlowImg(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String flowId = request.getParameter("flowId");
+        Command<InputStream> cmd = new HistoryProcessInstanceDiagramCmd(flowId);
+        InputStream inputStream = managementService.executeCommand(cmd);
+        BufferedOutputStream bout = new BufferedOutputStream(response.getOutputStream());
+        try {
+            if (null == inputStream) {
+                inputStream = this.getClass().getResourceAsStream("/images/no_flowInfo.png");
+            }
+            byte b[] = new byte[1024];
+            int len = inputStream.read(b);
+            while (len > 0) {
+                bout.write(b, 0, len);
+                len = inputStream.read(b);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            bout.close();
+            if (null != inputStream) {
+                inputStream.close();
+            }
+        }
+    }
+
 }

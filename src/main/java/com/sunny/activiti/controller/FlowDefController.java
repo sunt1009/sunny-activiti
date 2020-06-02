@@ -1,6 +1,7 @@
 package com.sunny.activiti.controller;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sunny.activiti.common.entity.*;
 import com.sunny.activiti.entity.FlowDef;
@@ -50,8 +51,8 @@ public class FlowDefController {
      */
     @RequestMapping("addFlowRule")
     public String addFlowRule(org.springframework.ui.Model model) {
-        List<SysDict> systemList = systemService.querySysDictInfo("10");
-        List<SysDict> busitypeList = systemService.querySysDictInfo("20");
+        List<SysDict> systemList = systemService.querySysDictInfo(SysConstant.SYSTEM_CODE);
+        List<SysDict> busitypeList = systemService.querySysDictInfo(SysConstant.BUSI_TYPE);
         List<FlowDef> flowDefList = flowInfoService.queryFlowDefList();
         model.addAttribute("systemList",systemList);
         model.addAttribute("busitypeList",busitypeList);

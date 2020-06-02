@@ -25,5 +25,5 @@ public interface ISystemService {
      * @param dictTypeCode
      * @return
      */
-    List<SysDict> querySysDictInfo(String dictTypeCode);
+    List<SysDict> querySysDictInfo(int dictTypeCode);
 }

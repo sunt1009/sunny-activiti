@@ -2,6 +2,7 @@ package com.sunny.activiti.controller;
 
 import com.sunny.activiti.common.entity.ResponseResult;
 import com.sunny.activiti.common.entity.ResponseUtil;
+import com.sunny.activiti.common.entity.SysConstant;
 import com.sunny.activiti.entity.SysDict;
 import com.sunny.activiti.service.ISystemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,7 @@ public class IndexController {
 
     @RequestMapping("querySysDict")
     public ResponseResult<List<SysDict>> querySysDict() {
-        String code = "10";
-        List<SysDict> sysDicts = systemService.querySysDictInfo(code);
+        List<SysDict> sysDicts = systemService.querySysDictInfo(SysConstant.SYSTEM_CODE);
         return ResponseUtil.makeOKRsp(sysDicts);
     }
 }
