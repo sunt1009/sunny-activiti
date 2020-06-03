@@ -1,8 +1,10 @@
 package com.sunny.activiti.entity;
 
+import cn.hutool.core.date.DatePattern;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -10,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * <p>
@@ -81,6 +84,14 @@ public class VacationOrder implements Serializable {
      */
     @TableField("BUSI_TYPE")
     private String busiType;
+
+    /**
+     * 创建时间
+     */
+    @DateTimeFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
+    @JsonFormat(pattern=DatePattern.NORM_DATETIME_PATTERN,timezone="GMT+8")
+    @TableField("CREATE_TIME")
+    private Date createTime;
 
     @TableField(exist = false)
     private String orderNo;

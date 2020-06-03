@@ -1,5 +1,6 @@
 package com.sunny.activiti.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -48,6 +49,7 @@ public class VacationOrderServiceImpl implements IVacationOrderService {
         vacationOrder.setVacationState(0);
         User currentUser = userService.getCurrentUser();
         vacationOrder.setUserId(currentUser.getUserName());
+        vacationOrder.setCreateTime(DateUtil.date());
         vacationOrder.setSystemCode("1001");
         vacationOrder.setBusiType("2001");
         vacationOrderMapper.insert(vacationOrder);
@@ -56,7 +58,9 @@ public class VacationOrderServiceImpl implements IVacationOrderService {
     @Override
     public Page<VacationOrder> queryVacationOrder(PageBean pageBean) {
         Page<VacationOrder> page = new Page<>(pageBean.getPage(),pageBean.getLimit());
-        Page<VacationOrder> vacationOrderPage = vacationOrderMapper.selectPage(page, null);
+        QueryWrapper<VacationOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("CREATE_TIME");
+        Page<VacationOrder> vacationOrderPage = vacationOrderMapper.selectPage(page, queryWrapper);
         List<VacationOrder> records = vacationOrderPage.getRecords();
         for (VacationOrder record : records) {
             record.setOrderNo(String.valueOf(record.getVacationId()));
