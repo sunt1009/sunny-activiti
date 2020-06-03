@@ -27,7 +27,7 @@ public class User implements Serializable {
     private Long userId;
 
     @TableField("P_USER_ID")
-    private Long parentUserId;
+    private String parentUserId;
 
     @TableField("USER_NAME")
     private String userName;

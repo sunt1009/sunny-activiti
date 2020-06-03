@@ -14,11 +14,10 @@ import com.sunny.activiti.entity.User;
 public interface IUserService {
 
     /**
-     * 根据用户名查询对应的角色和权限信息
-     * @param userName
+     * 获取当前登录的用户
      * @return
      */
-    User queryUserInfo(String userName);
+    User getCurrentUser();
 
     /**
      * 用户登录

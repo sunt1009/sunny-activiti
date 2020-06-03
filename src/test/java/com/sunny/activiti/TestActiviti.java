@@ -98,7 +98,13 @@ public class TestActiviti {
         //variables.put("spState","reject");
         taskService.complete(taskId,variables);
         log.info("当前流程办理完成");
+    }
 
+    @Test
+    public void queryTask() {
+        String flowId = "1268068631334354944";
+        Task task = taskService.createTaskQuery().processInstanceId(flowId).active().singleResult();
+        log.info(task.getId() + ":" + task.getAssignee());
     }
 
 }

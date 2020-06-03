@@ -19,12 +19,13 @@ import com.sunny.activiti.service.IFlowInfoService;
 import com.sunny.activiti.service.IVacationOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +50,8 @@ public class FlowInfoServiceImpl implements IFlowInfoService {
     private IVacationOrderService vacationOrderService;
     @Autowired
     private RuntimeService runtimeService;
+    @Autowired
+    private TaskService taskService;
 
 
     @Override
@@ -106,12 +109,11 @@ public class FlowInfoServiceImpl implements IFlowInfoService {
     }
 
     @Override
-    public void resolve(Long orderId) {
+    public String resolve(Long orderId,Map<String, Object> variables) {
         //查询所有流程规则
         List<FlowRule> flowRules = flowRuleMapper.selectList(null);
         if(IterUtil.isEmpty(flowRules)) {
-            log.info("审批单号:{},未匹配到流程规则",orderId);
-            return;
+            throw new RuntimeException("审批单号:"+orderId+",未匹配到流程规则");
         }
         //查询审批单信息
         VacationOrder vacationOrder = vacationOrderService.queryVacation(orderId);
@@ -127,7 +129,7 @@ public class FlowInfoServiceImpl implements IFlowInfoService {
         }
         if(ObjectUtil.isNull(currFlowRule)) {
             log.info("未配置流程规则");
-            return;
+            throw new RuntimeException("未配置流程规则");
         }
 
         log.info("审批单:{},匹配到工作流，匹配规则:{}",orderId, JSONUtil.toJsonStr(currFlowRule));
@@ -135,37 +137,46 @@ public class FlowInfoServiceImpl implements IFlowInfoService {
         FlowDef flowDef = this.queryFlowDef(currFlowRule.getDefId());
         //记录流程主表信息
         FlowMain flowMain = new FlowMain();
-        flowMain.setFlowInstId(CommonUtil.genId());
         flowMain.setOrderNo(orderId);
         flowMain.setFlowDefId(flowDef.getFlowCode());
         flowMain.setRuleId(currFlowRule.getRuleId());
-        flowMain.setFlowState(1);
-        flowMain.setCreateTime(DateUtil.date());
-        flowMainMapper.insert(flowMain);
-
-        this.runFlow(flowMain);
+        this.insertFlowMain(flowMain);
+        //运行流程
+        String flowId = this.runFlow(flowMain, variables);
+        return flowId;
     }
 
     @Override
-    public void runFlow(FlowMain flowMain) {
+    public String runFlow(FlowMain flowMain,Map<String, Object> variables) {
+        String flowId = "";
         try {
             log.info("-------->启动流程开始:{}",flowMain.getOrderNo());
-            Map<String, Object> variables = new HashMap<>();
-            variables.put("applyuser","sunny");
-            variables.put("subState","success");
             ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(flowMain.getFlowDefId(), String.valueOf(flowMain.getFlowInstId()), variables);
-            String flowId = processInstance.getProcessInstanceId();
+            flowId = processInstance.getProcessInstanceId();
             log.info("------>流程启动结束flowId:{}",flowId);
 
             flowMain.setFlowId(Long.valueOf(flowId));
             flowMainMapper.updateById(flowMain);
-            //更新审批单状态
-            vacationOrderService.updateState(flowMain.getOrderNo(),1);
-
         } catch (Exception e) {
             log.error("------------->流程启动失败.....");
             e.printStackTrace();
         }
+        return flowId;
+    }
+
+    @Override
+    @Transactional
+    public void insertFlowMain(FlowMain flowMain) {
+        flowMain.setFlowInstId(CommonUtil.genId());
+        flowMain.setFlowState(1);
+        flowMain.setCreateTime(DateUtil.date());
+        flowMainMapper.insert(flowMain);
+    }
+
+    @Override
+    public Task queryTaskByInstId(String processInstanceId) {
+        Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).active().singleResult();
+        return task;
     }
 
 }

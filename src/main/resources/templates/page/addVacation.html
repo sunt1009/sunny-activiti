@@ -71,7 +71,7 @@
                 beforeSend: function() {
                     layer.load(2);
                 },
-                url: '/vacation/submitOrder',
+                url: '/vacation/saveOrder',
                 data: JSON.stringify(data.field),
                 dataType: 'JSON',
                 contentType: 'application/json; charset=UTF-8',
@@ -93,9 +93,6 @@
                     layer.msg('系统繁忙请稍后重试', {icon: 5, time: 2000});
                 }
             });
-
-
-
             return false;
         });
 

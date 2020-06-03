@@ -5,8 +5,10 @@ import com.sunny.activiti.common.entity.PageBean;
 import com.sunny.activiti.entity.FlowDef;
 import com.sunny.activiti.entity.FlowMain;
 import com.sunny.activiti.entity.FlowRule;
+import org.activiti.engine.task.Task;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: IFlowInfoService
@@ -51,12 +53,27 @@ public interface IFlowInfoService {
     /**
      * 流程匹配服务
      * @param orderId 审批单ID
+     * @param variables
      */
-    void resolve(Long orderId);
+    String resolve(Long orderId,Map<String, Object> variables);
 
     /**
      * 启动流程
      * @param flowMain
+     * @param variables
      */
-    void runFlow(FlowMain flowMain);
+    String runFlow(FlowMain flowMain, Map<String, Object> variables);
+
+    /**
+     * 记录流转主表信息
+     * @param flowMain
+     */
+    void insertFlowMain(FlowMain flowMain);
+
+    /**
+     * 根据流程实例查询当前任务信息
+     * @param processInstanceId
+     * @return
+     */
+    Task queryTaskByInstId(String processInstanceId);
 }

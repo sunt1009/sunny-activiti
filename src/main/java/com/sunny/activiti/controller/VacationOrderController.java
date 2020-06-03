@@ -9,10 +9,7 @@ import com.sunny.activiti.service.IVacationOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -48,15 +45,30 @@ public class VacationOrderController {
     }
 
     /**
-     * 提交请假申请
+     * 填写请假条
      * @param vacationOrder
      * @return
      */
-    @PostMapping("submitOrder")
+    @PostMapping("saveOrder")
     @ResponseBody
-    public ResponseResult<String> submitOrder(@RequestBody VacationOrder vacationOrder) {
+    public ResponseResult<String> saveOrder(@RequestBody VacationOrder vacationOrder) {
         vacationOrderService.insertVacationOrder(vacationOrder);
         return ResponseUtil.makeOKRsp();
+    }
+
+    /**
+     * 提交请假申请
+     * @return
+     */
+    @PostMapping("submitApply")
+    @ResponseBody
+    public ResponseResult<String> submitApply(@RequestParam("vacationId") String vacationId) {
+        boolean res = vacationOrderService.submitApply(Long.valueOf(vacationId));
+        if(res){
+            return ResponseUtil.makeOKRsp();
+        }else {
+            return ResponseUtil.makeErrRsp(ResultCode.FAIL.code,"提交申请失败");
+        }
     }
 
 }

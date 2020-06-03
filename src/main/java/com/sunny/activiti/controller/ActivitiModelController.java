@@ -237,7 +237,7 @@ public class ActivitiModelController {
     @ResponseBody
     public ResponseResult<String> startProcess(HttpServletRequest request) {
         String vacationId = request.getParameter("vacationId");
-        flowInfoService.resolve(Long.valueOf(vacationId));
+        flowInfoService.resolve(Long.valueOf(vacationId),null);
         return ResponseUtil.makeOKRsp();
     }
 

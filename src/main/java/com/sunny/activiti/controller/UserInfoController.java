@@ -13,10 +13,11 @@ import com.sunny.activiti.service.ICacheService;
 import com.sunny.activiti.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -49,33 +50,22 @@ public class UserInfoController {
 
         String token = IdUtil.fastSimpleUUID();
         ServletUtil.addCookie(response, SysConstant.ACTIVITI_COOKIE, token,-1); //关闭浏览器登录失效
-        cacheService.cacheObjData(token,user, 60);
+        cacheService.cacheObjData(token,userResponseResult.getData(), 60);
         return userResponseResult;
     }
 
 
     /**
      * 获取登录信息
-     * @param request
      * @return
      */
     @RequestMapping("getLoginInfo")
-    public ResponseResult<User> getLoginInfo(HttpServletRequest request) {
-        try {
-            Cookie cookie = ServletUtil.getCookie(request, SysConstant.ACTIVITI_COOKIE.toLowerCase());
-            if(ObjectUtil.isNull(cookie)) {
-                return ResponseUtil.makeErrRsp(ResultCode.NOT_LOGIN.code,"登录失效");
-            }
-            String loginToken = cookie.getValue();
-            User cacheUser = (User) cacheService.getObjCacheByCode(loginToken);
-            if(ObjectUtil.isNull(cacheUser)) {
-                return ResponseUtil.makeErrRsp(ResultCode.NOT_LOGIN.code,"登录失效");
-            }
-            return ResponseUtil.makeOKRsp(cacheUser);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseUtil.makeErrRsp(ResultCode.NOT_LOGIN.code,"获取登录信息异常");
+    public ResponseResult<User> getLoginInfo() {
+        User currentUser = userService.getCurrentUser();
+        if(ObjectUtil.isNull(currentUser)) {
+            return ResponseUtil.makeErrRsp(ResultCode.NOT_LOGIN.code,"登录失效");
         }
+        return ResponseUtil.makeOKRsp(currentUser);
     }
 
     /**
@@ -84,7 +74,7 @@ public class UserInfoController {
      * @param response
      * @return
      */
-    @PostMapping(value = "/outLogin",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/outLogin")
     public ResponseResult<Object> outLogin(HttpServletRequest request,HttpServletResponse response) {
         try {
             //获取token

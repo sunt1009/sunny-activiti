@@ -38,4 +38,12 @@ public interface IVacationOrderService {
      * @param vacationId
      */
     void updateState(Long vacationId,Integer state);
+
+    /**
+     * 提交申请
+     * 1.申请成功更改状态为已提交审核中
+     * 2.执行工作流
+     * @param vacationId
+     */
+    boolean submitApply(Long vacationId);
 }

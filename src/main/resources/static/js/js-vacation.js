@@ -41,7 +41,7 @@ layui.use(['form','table'],function () {
         var data = obj.data;
         if (obj.event === 'add') {  // 监听删除操作
             var index = layer.open({
-                title: '请假申请',
+                title: '填写请假',
                 type: 2,
                 shade: 0.2,
                 maxmin:true,
@@ -68,8 +68,8 @@ layui.use(['form','table'],function () {
                     beforeSend: function() {
                         layer.load(2);
                     },
-                    type: 'GET',
-                    url: '/model/startProcess',
+                    type: 'POST',
+                    url: '/vacation/submitApply',
                     data: {
                         vacationId: vacationId
                     },
