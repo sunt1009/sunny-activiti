@@ -1,15 +1,17 @@
 package com.sunny.activiti.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sunny.activiti.common.entity.PageBean;
 import com.sunny.activiti.common.util.CommonUtil;
-import com.sunny.activiti.entity.FlowRule;
 import com.sunny.activiti.entity.VacationOrder;
 import com.sunny.activiti.mapper.VacationOrderMapper;
 import com.sunny.activiti.service.IVacationOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @ClassName: VacationOrderServiceImpl
@@ -38,6 +40,27 @@ public class VacationOrderServiceImpl implements IVacationOrderService {
     @Override
     public Page<VacationOrder> queryVacationOrder(PageBean pageBean) {
         Page<VacationOrder> page = new Page<>(pageBean.getPage(),pageBean.getLimit());
-        return vacationOrderMapper.selectPage(page, null);
+        Page<VacationOrder> vacationOrderPage = vacationOrderMapper.selectPage(page, null);
+        List<VacationOrder> records = vacationOrderPage.getRecords();
+        for (VacationOrder record : records) {
+            record.setOrderNo(String.valueOf(record.getVacationId()));
+        }
+        return vacationOrderPage;
+    }
+
+    @Override
+    public VacationOrder queryVacation(Long vacationId) {
+        QueryWrapper<VacationOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("VACATION_ID",vacationId);
+        return vacationOrderMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    @Transactional
+    public void updateState(Long vacationId, Integer state) {
+        VacationOrder vacationOrder = new VacationOrder();
+        vacationOrder.setVacationState(state);
+        vacationOrder.setVacationId(vacationId);
+        vacationOrderMapper.updateById(vacationOrder);
     }
 }

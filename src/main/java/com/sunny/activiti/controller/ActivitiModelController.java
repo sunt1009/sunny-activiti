@@ -1,8 +1,6 @@
 package com.sunny.activiti.controller;
 
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sunny.activiti.common.entity.ResponseResult;
@@ -25,7 +23,6 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.impl.interceptor.Command;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
@@ -239,9 +236,9 @@ public class ActivitiModelController {
     @RequestMapping("startProcess")
     @ResponseBody
     public ResponseResult<String> startProcess(HttpServletRequest request) {
-        String defKey = request.getParameter("defKey");
-        ProcessInstance processInstance = procesService.startProcessInstanceByKey(defKey, IdUtil.fastSimpleUUID());
-        return ResponseUtil.makeOKRsp(JSONUtil.toJsonStr(processInstance));
+        String vacationId = request.getParameter("vacationId");
+        flowInfoService.resolve(Long.valueOf(vacationId));
+        return ResponseUtil.makeOKRsp();
     }
 
     /**

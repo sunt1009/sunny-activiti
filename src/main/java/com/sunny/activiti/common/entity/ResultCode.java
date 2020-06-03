@@ -11,6 +11,9 @@ public enum ResultCode {
     // 成功
     SUCCESS(200),
 
+    // 未登录
+    NOT_LOGIN(203),
+
     // 失败
     FAIL(400),
 

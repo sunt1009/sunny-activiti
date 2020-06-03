@@ -15,4 +15,6 @@ public class SysConstant {
     public static final int BUSI_TYPE = 20;
     /**字典表请假类型**/
     public static final int VACATION_TYPE = 30;
+
+    public static final String ACTIVITI_COOKIE = "ACTIVITI_COOKIE";
 }

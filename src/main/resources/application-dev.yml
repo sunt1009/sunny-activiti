@@ -11,3 +11,8 @@ spring:
       idle-timeout: 18000 #空闲连接存活最大时间，默认600000（10分钟）
       pool-name: sunnyHikariCP  #连接池名称
       connection-test-query: SELECT 1
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: sxredis123
+    timeout: 3s

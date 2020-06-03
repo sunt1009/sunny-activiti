@@ -38,6 +38,7 @@ layui.use(['form','table'],function () {
      * toolbar 头部监听事件
      */
     table.on('toolbar(currentTableFilter)', function (obj) {
+        var data = obj.data;
         if (obj.event === 'add') {  // 监听删除操作
             var index = layer.open({
                 title: '请假申请',
@@ -60,10 +61,49 @@ layui.use(['form','table'],function () {
      */
     table.on('tool(currentTableFilter)', function (obj) {
         var data = obj.data;
-        if (obj.event === 'edit') {
-            openWin('/modeler.html?modelId=' + data.id,'编辑流程',null);
-        } else if (obj.event === 'copy') {  // 监听复制操作
-            openWin("/model/copyModel?modelId="+ data.id,'复制流程',null);
+        if (obj.event === 'submit') {//提交申请
+            layer.confirm('确认提交申请吗?', function (index) {
+                var vacationId = data.orderNo;
+                $.ajax({
+                    beforeSend: function() {
+                        layer.load(2);
+                    },
+                    type: 'GET',
+                    url: '/model/startProcess',
+                    data: {
+                        vacationId: vacationId
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        if(res.code == 200) {
+                            layer.msg(res.msg, { icon: 1 ,time: 1000});
+                            table.reload('vacationTable');
+                        }else {
+                            layer.msg(res.msg, {icon: 5, time: 2000});
+                        }
+                    },
+                    complete: function() {
+                        layer.closeAll("loading");
+                    },
+                    error: function() {
+                        layer.msg('系统繁忙请稍后重试', {icon: 5, time: 2000});
+                    }
+                });
+            });
+
+        } else if (obj.event === 'examine') {  // 查看流程图
+            var index = layer.open({
+                title: '查看流程',
+                type: 2,
+                shade: 0.2,
+                maxmin:true,
+                shadeClose: true,
+                area: ['60%', '50%'],
+                content: '/page/viewFlow',
+            });
+            $(window).on("resize", function () {
+                layer.full(index);
+            });
         }else if (obj.event === 'deploy') {  // 监听部署操作
             layer.confirm('确定部署么', function (index) {
                 var modelId = data.id;

@@ -25,4 +25,17 @@ public interface IVacationOrderService {
      * @return
      */
     Page<VacationOrder> queryVacationOrder(PageBean pageBean);
+
+    /**
+     * 根据审批单号查询审批信息
+     * @param vacationId
+     * @return
+     */
+    VacationOrder queryVacation(Long vacationId);
+
+    /**
+     * 更新审批单状态
+     * @param vacationId
+     */
+    void updateState(Long vacationId,Integer state);
 }

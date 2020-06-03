@@ -3,8 +3,6 @@ package com.sunny.activiti;
 
 import cn.hutool.core.collection.IterUtil;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -12,7 +10,6 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
-import org.activiti.engine.task.TaskQuery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,5 +89,16 @@ public class TestActiviti {
 
     }
 
+    @Test
+    public void execTask2() {
+        String taskId = "1267992464183001088";
+        Map<String, Object> variables = new HashMap<>();
+      //  variables.put("subState","success");
+        variables.put("spState","agree");
+        //variables.put("spState","reject");
+        taskService.complete(taskId,variables);
+        log.info("当前流程办理完成");
+
+    }
 
 }

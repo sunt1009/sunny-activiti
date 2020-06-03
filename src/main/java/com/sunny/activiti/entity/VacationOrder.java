@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -48,6 +49,7 @@ public class VacationOrder implements Serializable {
      * 结束时间
      */
     @TableField("END_TIME")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endTime;
 
     /**
@@ -79,6 +81,9 @@ public class VacationOrder implements Serializable {
      */
     @TableField("BUSI_TYPE")
     private String busiType;
+
+    @TableField(exist = false)
+    private String orderNo;
 
 
 }
