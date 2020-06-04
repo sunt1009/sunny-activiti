@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunny.activiti.mapper.VacationOrderMapper">
+
+
+    <select id="queryVacationOrder" resultType="com.sunny.activiti.entity.VacationOrderVo" parameterType="string">
+        SELECT
+            t.*, t2.USER_NAME,
+            t.VACATION_ID AS orderNo,
+            t3.FLOW_ID,
+            t4.DICT_NAME type_name
+        FROM
+            T_VACATION_ORDER t
+        LEFT JOIN sys_user t2 ON t.USER_ID = t2.USER_ID
+        LEFT JOIN tf_flow_main t3 ON t3.ORDER_NO = t.VACATION_ID
+        LEFT JOIN sys_dict t4 ON t4.DICT_VALUE = t.VACATION_TYPE
+        WHERE t2.USER_ID = #{userId}
+        ORDER BY t.CREATE_TIME DESC
+    </select>
+</mapper>

@@ -180,9 +180,16 @@ public class FlowInfoServiceImpl implements IFlowInfoService {
     }
 
     @Override
-    public FlowMain queryFlowMainById(Long orderNo) {
+    public FlowMain queryFlowMainByOrderNo(Long orderNo) {
         QueryWrapper<FlowMain> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("ORDER_NO",orderNo);
+        return flowMainMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public FlowMain queryFlowById(Long flowInstId) {
+        QueryWrapper<FlowMain> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("FLOW_INST_ID",flowInstId);
         return flowMainMapper.selectOne(queryWrapper);
     }
 

@@ -20,6 +20,13 @@ public interface IUserService {
     User getCurrentUser();
 
     /**
+     * 根据用户名查询用户信息
+     * @param userId
+     * @return
+     */
+    User queryUserById(String userId);
+
+    /**
      * 用户登录
      * @param userName
      * @param passWord

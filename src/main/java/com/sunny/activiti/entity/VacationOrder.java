@@ -93,8 +93,4 @@ public class VacationOrder implements Serializable {
     @TableField("CREATE_TIME")
     private Date createTime;
 
-    @TableField(exist = false)
-    private String orderNo;
-
-
 }

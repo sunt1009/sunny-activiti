@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sunny.activiti.common.entity.*;
 import com.sunny.activiti.entity.SysDict;
 import com.sunny.activiti.entity.VacationOrder;
+import com.sunny.activiti.entity.VacationOrderVo;
 import com.sunny.activiti.service.ISystemService;
 import com.sunny.activiti.service.IVacationOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,8 @@ public class VacationOrderController {
 
     @RequestMapping("queryList")
     @ResponseBody
-    public ResponseTableResult<List<VacationOrder>> queryList(PageBean pageBean) {
-        Page<VacationOrder> vacationOrderPage = vacationOrderService.queryVacationOrder(pageBean);
+    public ResponseTableResult<List<VacationOrderVo>> queryList(PageBean pageBean) {
+        Page<VacationOrderVo> vacationOrderPage = vacationOrderService.queryVacationOrder(pageBean);
         return ResponseUtil.makeTableRsp(0,vacationOrderPage.getTotal(),vacationOrderPage.getRecords());
     }
 

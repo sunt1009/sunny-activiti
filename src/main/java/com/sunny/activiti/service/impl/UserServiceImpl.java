@@ -52,6 +52,13 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public User queryUserById(String userId) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("USER_ID",userId);
+        return userMapper.selectOne(queryWrapper);
+    }
+
+    @Override
     public ResponseResult<User> doLogin(String userName, String passWord) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("USER_NAME",userName);

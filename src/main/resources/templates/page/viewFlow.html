@@ -5,6 +5,23 @@
     <title>查看流程图</title>
 </head>
 <body>
-<img src="/model/queryFlowImg?flowId=1267790340580966400">
+<img id="flow-image">
+<script>
+    function requestParameter(){
+        var url = window.location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            var strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]]=(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+
+    var flowId = requestParameter()["flowId"];
+    document.getElementById("flow-image").src = "/model/queryFlowImg?flowId=" + flowId;
+</script>
 </body>
 </html>

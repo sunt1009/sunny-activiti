@@ -8,10 +8,10 @@ layui.use(['form','table'],function () {
         url: '/vacation/queryList',
         toolbar: '#toolbarDemo',
         cols: [[
-            {field: 'userId', title: '请假人'},
+            {field: 'userName', title: '请假人'},
             {field: 'startTime', title: '请假开始时间'},
             {field: 'endTime', title: '请假结束时间'},
-            {field: 'vacationType', title: '请假类型'},
+            {field: 'typeName', title: '请假类型'},
             {field: 'vacationContext', title: '请假原因'},
             {field: 'createTime', title: '请假时间'},
             {field: 'vacationState', title: '状态',templet:function (d) {
@@ -100,7 +100,7 @@ layui.use(['form','table'],function () {
                 maxmin:true,
                 shadeClose: true,
                 area: ['60%', '50%'],
-                content: '/page/viewFlow',
+                content: '/page/viewFlow?flowId=' + data.flowId,
             });
             $(window).on("resize", function () {
                 layer.full(index);

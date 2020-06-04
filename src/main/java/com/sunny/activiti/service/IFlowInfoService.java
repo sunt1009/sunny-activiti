@@ -82,5 +82,12 @@ public interface IFlowInfoService {
      * @param orderNo
      * @return
      */
-    FlowMain queryFlowMainById(Long orderNo);
+    FlowMain queryFlowMainByOrderNo(Long orderNo);
+
+    /**
+     * 根据主键查询
+     * @param flowInstId
+     * @return
+     */
+    FlowMain queryFlowById(Long flowInstId);
 }

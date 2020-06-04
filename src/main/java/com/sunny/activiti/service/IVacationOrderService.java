@@ -3,6 +3,7 @@ package com.sunny.activiti.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sunny.activiti.common.entity.PageBean;
 import com.sunny.activiti.entity.VacationOrder;
+import com.sunny.activiti.entity.VacationOrderVo;
 
 /**
  * @ClassName: IVacationOrderService
@@ -24,7 +25,7 @@ public interface IVacationOrderService {
      * @param pageBean
      * @return
      */
-    Page<VacationOrder> queryVacationOrder(PageBean pageBean);
+    Page<VacationOrderVo> queryVacationOrder(PageBean pageBean);
 
     /**
      * 根据审批单号查询审批信息
@@ -35,6 +36,7 @@ public interface IVacationOrderService {
 
     /**
      * 更新审批单状态
+     * (0:待提交 1:审核中 2:已废弃 3:已完成)
      * @param vacationId
      */
     void updateState(Long vacationId,Integer state);

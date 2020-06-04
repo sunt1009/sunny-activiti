@@ -7,11 +7,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sunny.activiti.common.entity.PageBean;
 import com.sunny.activiti.common.util.CommonUtil;
-import com.sunny.activiti.entity.FlowMain;
-import com.sunny.activiti.entity.User;
-import com.sunny.activiti.entity.VacationOrder;
+import com.sunny.activiti.entity.*;
 import com.sunny.activiti.mapper.VacationOrderMapper;
 import com.sunny.activiti.service.IFlowInfoService;
+import com.sunny.activiti.service.ILogService;
 import com.sunny.activiti.service.IUserService;
 import com.sunny.activiti.service.IVacationOrderService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,11 +42,13 @@ public class VacationOrderServiceImpl implements IVacationOrderService {
     private IUserService userService;
     @Autowired
     private TaskService taskService;
-
+    @Autowired
+    private ILogService logService;
     @Override
     @Transactional
     public void insertVacationOrder(VacationOrder vacationOrder) {
-        vacationOrder.setVacationId(CommonUtil.genId());
+        long orderNo = CommonUtil.genId();
+        vacationOrder.setVacationId(orderNo);
         vacationOrder.setVacationState(0);
         User currentUser = userService.getCurrentUser();
         vacationOrder.setUserId(currentUser.getUserId());
@@ -56,18 +56,19 @@ public class VacationOrderServiceImpl implements IVacationOrderService {
         vacationOrder.setSystemCode("1001");
         vacationOrder.setBusiType("2001");
         vacationOrderMapper.insert(vacationOrder);
+
+        //记录日志
+        ProcessLog bean = new ProcessLog();
+        bean.setOrderNo(orderNo);
+        bean.setOperValue(currentUser.getUserName() + "填写审批单");
+        logService.insertLog(bean);
     }
 
     @Override
-    public Page<VacationOrder> queryVacationOrder(PageBean pageBean) {
+    public Page<VacationOrderVo> queryVacationOrder(PageBean pageBean) {
         Page<VacationOrder> page = new Page<>(pageBean.getPage(),pageBean.getLimit());
-        QueryWrapper<VacationOrder> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("CREATE_TIME");
-        Page<VacationOrder> vacationOrderPage = vacationOrderMapper.selectPage(page, queryWrapper);
-        List<VacationOrder> records = vacationOrderPage.getRecords();
-        for (VacationOrder record : records) {
-            record.setOrderNo(String.valueOf(record.getVacationId()));
-        }
+        User currentUser = userService.getCurrentUser();
+        Page<VacationOrderVo> vacationOrderPage = vacationOrderMapper.queryVacationOrder(page,currentUser.getUserId());
         return vacationOrderPage;
     }
 
@@ -95,7 +96,7 @@ public class VacationOrderServiceImpl implements IVacationOrderService {
         User currentUser = userService.getCurrentUser();
         String flowId = "";
         //匹配流程之前查询是否已经匹配过
-        FlowMain flowMain = flowInfoService.queryFlowMainById(vacationId);
+        FlowMain flowMain = flowInfoService.queryFlowMainByOrderNo(vacationId);
         if(ObjectUtil.isNull(flowMain)) {
             variables.put("applyuser",currentUser.getUserId());
             flowId = flowInfoService.resolve(vacationId, variables);
@@ -117,6 +118,17 @@ public class VacationOrderServiceImpl implements IVacationOrderService {
         taskService.complete(task.getId(),variables);
         //更新审批单状态
         this.updateState(vacationId,1);
+
+        //记录日志
+        ProcessLog bean = new ProcessLog();
+        User user = userService.queryUserById(currentUser.getParentUserId());
+        bean.setOrderNo(vacationId);
+        bean.setTaskId(task.getId());
+        bean.setTaskName(task.getName());
+        bean.setTaskKey(task.getTaskDefinitionKey());
+        bean.setApprovStatu("submitApply");
+        bean.setOperValue(currentUser.getUserName() + "提交申请,待【"+user.getUserName()+"】审核");
+        logService.insertLog(bean);
         return res;
     }
 
