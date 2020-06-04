@@ -23,6 +23,30 @@
         WHERE
             t.VACATION_ID = t2.ORDER_NO
         AND t2.FLOW_ID = t3.PROC_INST_ID_
+        AND t.VACATION_STATE = 1
         AND t3.ASSIGNEE_ = #{userId}
+    </select>
+    <!--查询审批单对应的任务信息-->
+    <select id="queryTaskById" resultType="com.sunny.activiti.entity.TaskVo" parameterType="long">
+        SELECT
+            t.VACATION_ID,
+            t.USER_ID,
+            t.START_TIME,
+            t.END_TIME,
+            t.VACATION_CONTEXT,
+            t2.FLOW_DEF_ID,
+            t3.ID_ task_Id,
+            t3.NAME_ task_name,
+            t3.TASK_DEF_KEY_ task_def_key,
+            t3.ASSIGNEE_ assign,
+            t3.CREATE_TIME_ create_time
+        FROM
+            T_VACATION_ORDER t,
+            tf_flow_main t2,
+            act_ru_task t3
+            WHERE
+            t.VACATION_ID = t2.ORDER_NO
+            AND t2.FLOW_ID = t3.PROC_INST_ID_
+            and t.VACATION_ID = #{vacationId}
     </select>
 </mapper>

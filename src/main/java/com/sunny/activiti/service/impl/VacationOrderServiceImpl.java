@@ -7,12 +7,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sunny.activiti.common.entity.PageBean;
 import com.sunny.activiti.common.util.CommonUtil;
+import com.sunny.activiti.entity.FlowMain;
 import com.sunny.activiti.entity.User;
 import com.sunny.activiti.entity.VacationOrder;
 import com.sunny.activiti.mapper.VacationOrderMapper;
 import com.sunny.activiti.service.IFlowInfoService;
 import com.sunny.activiti.service.IUserService;
 import com.sunny.activiti.service.IVacationOrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,7 @@ import java.util.Map;
  * @Version 1.0
  **/
 @Service
+@Slf4j
 public class VacationOrderServiceImpl implements IVacationOrderService {
 
     @Autowired
@@ -48,7 +51,7 @@ public class VacationOrderServiceImpl implements IVacationOrderService {
         vacationOrder.setVacationId(CommonUtil.genId());
         vacationOrder.setVacationState(0);
         User currentUser = userService.getCurrentUser();
-        vacationOrder.setUserId(currentUser.getUserName());
+        vacationOrder.setUserId(currentUser.getUserId());
         vacationOrder.setCreateTime(DateUtil.date());
         vacationOrder.setSystemCode("1001");
         vacationOrder.setBusiType("2001");
@@ -90,8 +93,15 @@ public class VacationOrderServiceImpl implements IVacationOrderService {
         //匹配流程并指定申请人
         Map<String, Object> variables = new HashMap<>();
         User currentUser = userService.getCurrentUser();
-        variables.put("applyuser",currentUser.getUserName());
-        String flowId = flowInfoService.resolve(vacationId, variables);
+        String flowId = "";
+        //匹配流程之前查询是否已经匹配过
+        FlowMain flowMain = flowInfoService.queryFlowMainById(vacationId);
+        if(ObjectUtil.isNull(flowMain)) {
+            variables.put("applyuser",currentUser.getUserId());
+            flowId = flowInfoService.resolve(vacationId, variables);
+        }else {
+            flowId = String.valueOf(flowMain.getFlowId());
+        }
         if(StrUtil.isBlank(flowId)) {
             res = false;
             return res;
@@ -103,9 +113,11 @@ public class VacationOrderServiceImpl implements IVacationOrderService {
             return res;
         }
         variables.put("subState","success");
+        log.info("------------->当前办理任务ID:{}",task.getId());
         taskService.complete(task.getId(),variables);
         //更新审批单状态
         this.updateState(vacationId,1);
         return res;
     }
+
 }

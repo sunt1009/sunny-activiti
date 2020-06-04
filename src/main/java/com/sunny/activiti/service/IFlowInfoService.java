@@ -20,7 +20,7 @@ import java.util.Map;
 public interface IFlowInfoService {
 
     /**
-     * 查询流程定义
+     * 查询流程定义列表
      * @return
      */
     List<FlowDef> queryFlowDefList();
@@ -76,4 +76,11 @@ public interface IFlowInfoService {
      * @return
      */
     Task queryTaskByInstId(String processInstanceId);
+
+    /**
+     * 根据审批单号查询匹配流程信息
+     * @param orderNo
+     * @return
+     */
+    FlowMain queryFlowMainById(Long orderNo);
 }

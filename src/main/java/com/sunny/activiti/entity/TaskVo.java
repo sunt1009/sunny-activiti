@@ -18,7 +18,7 @@ public class TaskVo {
     /**
      * 请假单ID
      */
-    private Long vacationId;
+    private String vacationId;
 
     /**
      * 请假人ID
@@ -69,5 +69,14 @@ public class TaskVo {
      * 任务创建时间
      */
     private Date createTime;
+
+    /**
+     * 审批类型 0:同意 1:驳回
+     */
+    private String approvalType;
+    /**
+     * 备注
+     */
+    private String remark;
 
 }

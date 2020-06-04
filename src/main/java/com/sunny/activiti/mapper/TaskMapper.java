@@ -20,4 +20,11 @@ public interface TaskMapper extends BaseMapper<TaskVo> {
      * @return
      */
     Page<TaskVo> queryMyTask(Page<TaskVo> page, @Param("userId") String userId);
+
+    /**
+     * 查询审批单当前任务信息
+     * @param vacationId
+     * @return
+     */
+    TaskVo queryTaskById(@Param("vacationId") Long vacationId);
 }

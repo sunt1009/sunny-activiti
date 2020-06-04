@@ -24,7 +24,7 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId("USER_ID")
-    private Long userId;
+    private String userId;
 
     @TableField("P_USER_ID")
     private String parentUserId;

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>任务审批</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">请假人</label>
+        <div class="layui-input-inline">
+            <input type="text" name="username" readonly class="layui-input" th:value="${taskInfo.userId}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开始时间</label>
+        <div class="layui-input-inline">
+            <input type="text" name="username" readonly class="layui-input" th:value="${taskInfo.startTime}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">结束时间</label>
+        <div class="layui-input-inline">
+            <input type="text" name="username" readonly class="layui-input" th:value="${taskInfo.endTime}">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">请假原因</label>
+        <div class="layui-input-block">
+            <textarea name="vacationContext" class="layui-textarea" readonly th:text="${taskInfo.vacationContext}"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">审批意见</label>
+        <div class="layui-input-inline">
+            <select name="approvalType" lay-verify="required" lay-reqtext="请选择审批意见">
+                <option value="">请选择</option>
+                <option value="0">同意</option>
+                <option value="1">驳回</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea name="remark" class="layui-textarea" ></textarea>
+        </div>
+    </div>
+    <input type="hidden" name="taskId" th:value="${taskInfo.taskId}">
+    <input type="hidden" name="vacationId" th:value="${taskInfo.vacationId}">
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">提交</button>
+        </div>
+    </div>
+</div>
+<script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form','laydate'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            laydate = layui.laydate,
+            $ = layui.$;
+        laydate.render({
+            elem: '#startTime'
+        });
+        laydate.render({
+            elem: '#endTime'
+        });
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            $.ajax({
+                type: 'POST',
+                beforeSend: function() {
+                    layer.load(2);
+                },
+                url: '/task/completeTask',
+                data: JSON.stringify(data.field),
+                dataType: 'JSON',
+                contentType: 'application/json; charset=UTF-8',
+                success: function (res) {
+                    if(res.code == '200') {
+                        layer.msg(res.msg, { icon: 1 ,time: 1000},function () {
+                            var iframeIndex = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(iframeIndex);
+                            //刷新父页面的table
+                            parent.layui.table.reload('myTaskTable');
+                        });
+                    }else {
+                        layer.msg(res.msg, {icon: 5, time: 2000});
+                    }
+                }, complete: function() {
+                    layer.closeAll("loading");
+                },
+                error: function() {
+                    layer.msg('系统繁忙请稍后重试', {icon: 5, time: 2000});
+                }
+            });
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

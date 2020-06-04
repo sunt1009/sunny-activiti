@@ -46,4 +46,5 @@ public interface IVacationOrderService {
      * @param vacationId
      */
     boolean submitApply(Long vacationId);
+
 }
