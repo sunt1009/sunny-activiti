@@ -8,6 +8,7 @@ layui.use(['form','table'],function () {
         url: '/vacation/queryList',
         toolbar: '#toolbarDemo',
         cols: [[
+            {field: 'userName', orderNo: '请假单编号'},
             {field: 'userName', title: '请假人'},
             {field: 'startTime', title: '请假开始时间'},
             {field: 'endTime', title: '请假结束时间'},
@@ -105,34 +106,15 @@ layui.use(['form','table'],function () {
             $(window).on("resize", function () {
                 layer.full(index);
             });
-        }else if (obj.event === 'deploy') {  // 监听部署操作
-            layer.confirm('确定部署么', function (index) {
-                var modelId = data.id;
-                $.ajax({
-                    beforeSend: function() {
-                        layer.load(2);
-                    },
-                    type: 'GET',
-                    url: '/model/deployModel',
-                    data: {
-                        modelId: modelId
-                    },
-                    dataType: 'json',
-                    success: function (res) {
-                        if(res.code == 200) {
-                            layer.msg(res.msg, { icon: 1 ,time: 1000});
-                            table.reload('currentTableId');
-                        }else {
-                            layer.msg(res.msg, {icon: 5, time: 2000});
-                        }
-                    },
-                    complete: function() {
-                        layer.closeAll("loading");
-                    },
-                    error: function() {
-                        layer.msg('系统繁忙请稍后重试', {icon: 5, time: 2000});
-                    }
-                });
+        }else if (obj.event === 'edit') {  // 编辑
+            var index = layer.open({
+                title: '编辑申请单',
+                type: 2,
+                shade: 0.2,
+                maxmin:true,
+                shadeClose: true,
+                area: ['80%', '80%'],
+                content: '/vacation/toAdd?orderNo='+data.orderNo,
             });
         } else if (obj.event === 'delete') {
             layer.confirm('确定删除行么', function (index) {
@@ -141,16 +123,16 @@ layui.use(['form','table'],function () {
                     beforeSend: function() {
                         layer.load(2);
                     },
-                    type: 'GET',
-                    url: '/model/delModel',
+                    type: 'POST',
+                    url: '/vacation/delVacation',
                     data: {
-                        modelId: modelId
+                        vacationId: data.orderNo
                     },
                     dataType: 'json',
                     success: function (res) {
                         if(res.code == 200) {
                             layer.msg(res.msg, { icon: 1 ,time: 1000});
-                            table.reload('currentTableId');
+                            table.reload('vacationTable');
                         }else {
                             layer.msg(res.msg, {icon: 5, time: 2000});
                         }
@@ -168,22 +150,3 @@ layui.use(['form','table'],function () {
 
 });
 
-
-function addModel() {
-   openWin('/model/createModel?key=&name=name&description=description','创建流程',null);
-}
-
-
-/**
- * 监听打开的弹窗，关闭后刷新页面
- */
-function openWin(url,text,winInfo) {
-    var winObj = window.open(url, text, winInfo);
-    var loop = setInterval(function () {
-        if (winObj.closed) {
-            clearInterval(loop);
-            //alert('closed');
-            parent.location.reload();
-        }
-    }, 1);
-}

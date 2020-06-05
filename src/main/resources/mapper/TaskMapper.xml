@@ -13,6 +13,7 @@
             t2.FLOW_DEF_ID,
             t3.ID_ task_Id,
             t3.NAME_ task_name,
+            t3.PROC_INST_ID_ flow_id,
             t3.TASK_DEF_KEY_ task_def_key,
             t3.ASSIGNEE_ assign,
             t3.CREATE_TIME_ create_time

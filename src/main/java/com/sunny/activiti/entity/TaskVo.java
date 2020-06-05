@@ -41,9 +41,14 @@ public class TaskVo {
     private String vacationContext;
 
     /**
-     * 流程实例ID
+     * 流程定义ID
      */
     private String flowDefId;
+
+    /**
+     * 流程实例ID
+     */
+    private String flowId;
 
     /**
      * 任务ID

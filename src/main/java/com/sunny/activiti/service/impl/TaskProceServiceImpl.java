@@ -64,7 +64,7 @@ public class TaskProceServiceImpl implements ITaskProceService {
             spContext = "审批通过";
             variables.put("spState",spState);
         }else if(StrUtil.equals("1",taskVo.getApprovalType())){//驳回
-            vacationOrderService.updateState(Long.valueOf(taskVo.getVacationId()),0);
+            vacationOrderService.updateState(Long.valueOf(taskVo.getVacationId()),SysConstant.SUBMITTED_STATE);
             spState = SysConstant.APPROVAL_REJECT;
             spContext = "审批未通过";
             variables.put("spState",spState);

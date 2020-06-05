@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sunny.activiti.common.entity.PageBean;
+import com.sunny.activiti.common.entity.SysConstant;
 import com.sunny.activiti.common.util.CommonUtil;
 import com.sunny.activiti.entity.*;
 import com.sunny.activiti.mapper.VacationOrderMapper;
@@ -47,20 +48,26 @@ public class VacationOrderServiceImpl implements IVacationOrderService {
     @Override
     @Transactional
     public void insertVacationOrder(VacationOrder vacationOrder) {
-        long orderNo = CommonUtil.genId();
-        vacationOrder.setVacationId(orderNo);
-        vacationOrder.setVacationState(0);
-        User currentUser = userService.getCurrentUser();
-        vacationOrder.setUserId(currentUser.getUserId());
-        vacationOrder.setCreateTime(DateUtil.date());
-        vacationOrder.setSystemCode("1001");
-        vacationOrder.setBusiType("2001");
-        vacationOrderMapper.insert(vacationOrder);
-
         //记录日志
         ProcessLog bean = new ProcessLog();
-        bean.setOrderNo(orderNo);
-        bean.setOperValue(currentUser.getUserName() + "填写审批单");
+        User currentUser = userService.getCurrentUser();
+        if(null != vacationOrder.getVacationId()) {//更新
+            vacationOrderMapper.updateById(vacationOrder);
+            bean.setOrderNo(vacationOrder.getVacationId());
+            bean.setOperValue(currentUser.getUserName() + "修改审批单");
+        }else {
+            long orderNo = CommonUtil.genId();
+            bean.setOrderNo(orderNo);
+            vacationOrder.setVacationId(orderNo);
+            vacationOrder.setVacationState(0);
+            vacationOrder.setUserId(currentUser.getUserId());
+            vacationOrder.setCreateTime(DateUtil.date());
+            vacationOrder.setSystemCode("1001");
+            vacationOrder.setBusiType("2001");
+            vacationOrderMapper.insert(vacationOrder);
+            bean.setOperValue(currentUser.getUserName() + "填写审批单");
+        }
+
         logService.insertLog(bean);
     }
 
@@ -117,7 +124,7 @@ public class VacationOrderServiceImpl implements IVacationOrderService {
         log.info("------------->当前办理任务ID:{}",task.getId());
         taskService.complete(task.getId(),variables);
         //更新审批单状态
-        this.updateState(vacationId,1);
+        this.updateState(vacationId,SysConstant.REVIEW_STATE);
 
         //记录日志
         ProcessLog bean = new ProcessLog();
@@ -130,6 +137,20 @@ public class VacationOrderServiceImpl implements IVacationOrderService {
         bean.setOperValue(currentUser.getUserName() + "提交申请,待【"+user.getUserName()+"】审核");
         logService.insertLog(bean);
         return res;
+    }
+
+    @Override
+    @Transactional
+    public void delVacation(Long vacationId) {
+        this.updateState(vacationId, SysConstant.OBSOLETE_STATE);
+        //记录日志
+        User currentUser = userService.getCurrentUser();
+        ProcessLog bean = new ProcessLog();
+        User user = userService.queryUserById(currentUser.getParentUserId());
+        bean.setOrderNo(vacationId);
+        bean.setApprovStatu("DELETE");
+        bean.setOperValue(currentUser.getUserName() + "删除审批单");
+        logService.insertLog(bean);
     }
 
 }

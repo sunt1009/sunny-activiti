@@ -1,5 +1,6 @@
 package com.sunny.activiti.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sunny.activiti.common.entity.*;
 import com.sunny.activiti.entity.ProcessLog;
@@ -48,9 +49,14 @@ public class VacationOrderController {
 
 
     @RequestMapping("toAdd")
-    public String toAdd(Model model) {
+    public String toAdd(Model model, @RequestParam(value = "orderNo",required = false) String orderNo) {
         List<SysDict> typeList = systemService.querySysDictInfo(SysConstant.VACATION_TYPE);
         model.addAttribute("typeList",typeList);
+        if(StrUtil.isNotBlank(orderNo)) {//编辑
+            VacationOrder vacationOrder = vacationOrderService.queryVacation(Long.valueOf(orderNo));
+            model.addAttribute("vacationOrder",vacationOrder);
+            return "page/editVacation";
+        }
         return "page/addVacation";
     }
 
@@ -94,6 +100,18 @@ public class VacationOrderController {
         }else {
             return ResponseUtil.makeErrRsp(ResultCode.FAIL.code,"提交申请失败");
         }
+    }
+
+    /**
+     * 删除请假条
+     * @param vacationId
+     * @return
+     */
+    @PostMapping("delVacation")
+    @ResponseBody
+    public ResponseResult<String> delVacation(@RequestParam("vacationId") Long vacationId) {
+        vacationOrderService.delVacation(vacationId);
+        return ResponseUtil.makeOKRsp();
     }
 
 }

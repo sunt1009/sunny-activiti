@@ -248,8 +248,13 @@ public class ActivitiModelController {
     @RequestMapping("queryFlowImg")
     public void queryFlowImg(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String flowId = request.getParameter("flowId");
-        Command<InputStream> cmd = new HistoryProcessInstanceDiagramCmd(flowId);
-        InputStream inputStream = managementService.executeCommand(cmd);
+        InputStream inputStream = null;
+        if(StrUtil.isBlank(flowId) || StrUtil.equals("null",flowId)) {
+            inputStream = this.getClass().getClassLoader().getResourceAsStream("static/images/no_flowInfo.png");
+        }else {
+            Command<InputStream> cmd = new HistoryProcessInstanceDiagramCmd(flowId);
+            inputStream = managementService.executeCommand(cmd);
+        }
         BufferedOutputStream bout = new BufferedOutputStream(response.getOutputStream());
         try {
             if (null == inputStream) {

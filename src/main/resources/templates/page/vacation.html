@@ -25,11 +25,10 @@
                 <a class="layui-btn layui-btn-danger layui-btn-xs data-count-delete" lay-event="submit">提交申请</a>
                 <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="examine">查看</a>
                 <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs data-count-delete" lay-event="del">删除</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs data-count-delete" lay-event="delete">删除</a>
             {{#}if(d.vacationState ==1) { }}
                  <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="examine">审批查询</a>
             {{#}if(d.vacationState ==2) {}}
-                <a class="layui-btn layui-btn-danger layui-btn-xs data-count-delete" lay-event="delete">删除</a>
                 <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="examine">审批查询</a>
             {{#}if(d.vacationState ==3) { }}
               <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="examine">审批查询</a>

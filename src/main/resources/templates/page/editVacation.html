@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress ALL-->
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
@@ -21,28 +22,29 @@
         <div class="layui-input-inline">
             <select name="vacationType" lay-verify="required" lay-reqtext="请选择请假类型" >
                 <option value="">请选择</option>
-                <option th:each="type:${typeList}" th:value="${type.dictValue}" th:text="${type.dictName}"></option>
+                <option th:each="type:${typeList}" th:value="${type.dictValue}" th:text="${type.dictName}" th:selected="${type.dictValue} eq ${vacationOrder.vacationType}"></option>
             </select>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>
         <div class="layui-input-inline">
-            <input type="text" name="startTime" id="startTime" lay-verify="required|date" lay-reqtext="请选择开始时间" placeholder="请假开始时间" autocomplete="off" class="layui-input" >
+            <input type="text" name="startTime" id="startTime" lay-verify="required|date" lay-reqtext="请选择开始时间" placeholder="请假开始时间" autocomplete="off" class="layui-input" th:value="${vacationOrder.startTime}">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">结束时间</label>
         <div class="layui-input-inline">
-            <input type="text" name="endTime" id="endTime" lay-verify="required|date" lay-reqtext="请选择结束时间" placeholder="请假结束时间" autocomplete="off" class="layui-input" >
+            <input type="text" name="endTime" id="endTime" lay-verify="required|date" lay-reqtext="请选择结束时间" placeholder="请假结束时间" autocomplete="off" class="layui-input" th:value="${vacationOrder.endTime}">
         </div>
     </div>
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">请假原因</label>
         <div class="layui-input-block">
-            <textarea name="vacationContext" class="layui-textarea" lay-verify="required" lay-reqtext="请输入请假原因" placeholder="请输入请假原因" ></textarea>
+            <textarea name="vacationContext" class="layui-textarea" lay-verify="required" lay-reqtext="请输入请假原因" placeholder="请输入请假原因" th:text="${vacationOrder.vacationContext}"></textarea>
         </div>
     </div>
+    <input type="hidden" name="vacationId" th:value="${vacationOrder.vacationId}">
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">提交</button>

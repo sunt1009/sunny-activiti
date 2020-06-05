@@ -1,5 +1,6 @@
 package com.sunny.activiti.listener;
 
+import com.sunny.activiti.common.entity.SysConstant;
 import com.sunny.activiti.common.util.SpringUtils;
 import com.sunny.activiti.entity.FlowMain;
 import com.sunny.activiti.entity.ProcessLog;
@@ -28,7 +29,7 @@ public class FinishDelegate implements JavaDelegate {
         IVacationOrderService vacationOrderService = SpringUtils.getBean(IVacationOrderService.class);
         IFlowInfoService flowInfoService = SpringUtils.getBean(IFlowInfoService.class);
         FlowMain flowMain = flowInfoService.queryFlowById(Long.valueOf(flowInstId));
-        vacationOrderService.updateState(flowMain.getOrderNo(),3);
+        vacationOrderService.updateState(flowMain.getOrderNo(), SysConstant.COMPLETED_STATE);
         //记录日志
         ILogService logService = SpringUtils.getBean(ILogService.class);
         IUserService userService = SpringUtils.getBean(IUserService.class);

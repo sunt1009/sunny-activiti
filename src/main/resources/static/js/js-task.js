@@ -42,6 +42,19 @@ layui.use(['form','table'],function () {
             $(window).on("resize", function () {
                 layer.full(index);
             });
+        } else if (obj.event === 'examine') {  //查看审批详情
+            var index = layer.open({
+                title: '审批详情',
+                type: 2,
+                shade: 0.2,
+                maxmin:true,
+                shadeClose: true,
+                area: ['80%', '80%'],
+                content: '/vacation/provalDetail?flowId='+data.flowId + '&orderNo='+data.vacationId,
+            });
+            $(window).on("resize", function () {
+                layer.full(index);
+            });
         }
     });
 

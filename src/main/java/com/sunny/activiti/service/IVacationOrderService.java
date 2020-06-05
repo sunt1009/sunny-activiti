@@ -49,4 +49,9 @@ public interface IVacationOrderService {
      */
     boolean submitApply(Long vacationId);
 
+    /**
+     * 删除审批单
+     * @param vacationId
+     */
+    void delVacation(Long vacationId);
 }
