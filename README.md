@@ -40,4 +40,4 @@ sunny-activiti是一个SpringBoot集成activiti实现在创建、部署流程、
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0605/171624_accb6c12_806588.png "屏幕截图.png")
 
 #### 文档后续更新地址
-[输入链接说明](https://www.sunnyblog.top/)
+[文档更新地址](https://www.sunnyblog.top/)
