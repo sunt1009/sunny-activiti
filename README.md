@@ -22,5 +22,22 @@ sunny-activiti是一个SpringBoot集成activiti实现在创建、部署流程、
 3.  修改application-dev.yml数据库的配置和redis配置
 4. 启动项目访问默认8080端口
 5. 登录用户名默认密码：123
+#### 项目截图
+- 视频演示
+链接：https://pan.baidu.com/s/1d6UF19OhmQcaCqERTkzsCQ
+提取码：zrbe
+- 登录页
+![登录页面](https://images.gitee.com/uploads/images/2020/0605/171237_7c3597aa_806588.png "屏幕截图.png")
+- 首页
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0605/171322_ae275f60_806588.png "屏幕截图.png")
+- 创建工作流
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0605/171353_f8230e44_806588.png "屏幕截图.png")
+- 流程规则配置
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0605/171431_d86afc47_806588.png "屏幕截图.png")
+- 审批流程查看
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0605/171550_26046adb_806588.png "屏幕截图.png")
+- 流程审批
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0605/171624_accb6c12_806588.png "屏幕截图.png")
 
-
+#### 文档后续更新地址
+[输入链接说明](https://www.sunnyblog.top/)
