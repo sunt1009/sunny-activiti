@@ -26,7 +26,7 @@ layui.use(['form','table'],function () {
                     }
 
                 }},
-            {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+            {title: '操作', minWidth: 240, toolbar: '#currentTableBar', align: "center"}
         ]],
         limits: [10, 15, 20, 25, 50, 100],
         limit: 10,
@@ -94,13 +94,13 @@ layui.use(['form','table'],function () {
 
         } else if (obj.event === 'examine') {  // 查看流程图
             var index = layer.open({
-                title: '查看流程',
+                title: '审批详情',
                 type: 2,
                 shade: 0.2,
                 maxmin:true,
                 shadeClose: true,
-                area: ['60%', '50%'],
-                content: '/page/viewFlow?flowId=' + data.flowId,
+                area: ['80%', '80%'],
+                content: '/vacation/provalDetail?flowId='+data.flowId + '&orderNo='+data.orderNo,
             });
             $(window).on("resize", function () {
                 layer.full(index);

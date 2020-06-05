@@ -3,9 +3,12 @@ package com.sunny.activiti.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sunny.activiti.common.entity.PageBean;
+import com.sunny.activiti.common.entity.SysConstant;
+import com.sunny.activiti.entity.ProcessLog;
 import com.sunny.activiti.entity.TaskVo;
 import com.sunny.activiti.entity.User;
 import com.sunny.activiti.mapper.TaskMapper;
+import com.sunny.activiti.service.ILogService;
 import com.sunny.activiti.service.ITaskProceService;
 import com.sunny.activiti.service.IUserService;
 import com.sunny.activiti.service.IVacationOrderService;
@@ -36,8 +39,10 @@ public class TaskProceServiceImpl implements ITaskProceService {
     private TaskService taskService;
     @Autowired
     private IVacationOrderService vacationOrderService;
+    @Autowired
+    private ILogService logService;
 
-    @Override
+  @Override
     public Page<TaskVo> queryMyTask(PageBean pageBean) {
         Page<TaskVo> page = new Page<>(pageBean.getPage(),pageBean.getLimit());
         User currentUser = userService.getCurrentUser();
@@ -52,12 +57,30 @@ public class TaskProceServiceImpl implements ITaskProceService {
     @Override
     public void completeTask(TaskVo taskVo) {
         Map<String, Object> variables = new HashMap<>();
+        String spState = "";
+        String spContext = "";
         if(StrUtil.equals("0",taskVo.getApprovalType())) {//审核通过
-            variables.put("spState","agree");
+            spState = SysConstant.APPROVAL_AGREE;
+            spContext = "审批通过";
+            variables.put("spState",spState);
         }else if(StrUtil.equals("1",taskVo.getApprovalType())){//驳回
             vacationOrderService.updateState(Long.valueOf(taskVo.getVacationId()),0);
-            variables.put("spState","reject");
+            spState = SysConstant.APPROVAL_REJECT;
+            spContext = "审批未通过";
+            variables.put("spState",spState);
         }
         taskService.complete(taskVo.getTaskId(),variables);
+
+        //记录日志
+        ProcessLog bean = new ProcessLog();
+        User user = userService.getCurrentUser();
+        bean.setOrderNo(Long.valueOf(taskVo.getVacationId()));
+        bean.setTaskId(taskVo.getTaskId());
+        bean.setTaskName(taskVo.getTaskName());
+        bean.setTaskKey(taskVo.getTaskDefKey());
+        bean.setApprovStatu(spState);
+        bean.setOperValue(user.getUserName() + spContext + ",审批意见:" + taskVo.getRemark());
+        logService.insertLog(bean);
+
     }
 }

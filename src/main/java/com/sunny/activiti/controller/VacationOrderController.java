@@ -2,9 +2,11 @@ package com.sunny.activiti.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sunny.activiti.common.entity.*;
+import com.sunny.activiti.entity.ProcessLog;
 import com.sunny.activiti.entity.SysDict;
 import com.sunny.activiti.entity.VacationOrder;
 import com.sunny.activiti.entity.VacationOrderVo;
+import com.sunny.activiti.service.ILogService;
 import com.sunny.activiti.service.ISystemService;
 import com.sunny.activiti.service.IVacationOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,14 @@ public class VacationOrderController {
     private IVacationOrderService vacationOrderService;
     @Autowired
     private ISystemService systemService;
+    @Autowired
+    private ILogService logService;
 
+    /**
+     * 请假列表查询
+     * @param pageBean
+     * @return
+     */
     @RequestMapping("queryList")
     @ResponseBody
     public ResponseTableResult<List<VacationOrderVo>> queryList(PageBean pageBean) {
@@ -44,6 +53,21 @@ public class VacationOrderController {
         model.addAttribute("typeList",typeList);
         return "page/addVacation";
     }
+
+    /**
+     * 审批详情页
+     * @param model
+     * @param flowId
+     * @param orderNo
+     * @return
+     */
+    @RequestMapping("provalDetail")
+    public String provalDetail(Model model,@RequestParam("flowId") String flowId,@RequestParam("orderNo") String orderNo) {
+        List<ProcessLog> logList = logService.queryOperLog(Long.valueOf(orderNo));
+        model.addAttribute("logList",logList);
+        return "/page/viewFlow";
+    }
+
 
     /**
      * 填写请假条
