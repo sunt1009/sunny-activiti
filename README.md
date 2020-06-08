@@ -1,7 +1,9 @@
 # sunny-activiti
 
 #### 介绍
-sunny-activiti是一个SpringBoot集成activiti实现在创建、部署流程、复制流程、删除流程以及流程规则配置，实现请假流程工作流流转和业务处理，感兴趣可以Watch、Start持续关注项目最新状态，加入QQ群：939017225解决各种疑问和丰富的学习资源、文档后续更新地址：https://www.sunnyblog.top/
+1.  sunny-activiti是一个SpringBoot集成activiti实现在创建、部署流程、复制流程、删除流程以及流程规则配置，实现请假流程工作流流转和业务处理，感兴趣可以Watch、Start持续关注项目最新状态，文档和数据库脚本更新地址：https://www.sunnyblog.top/detail.html?id=1268813477212848128
+。
+2.  **本项目只实现activit流程相关的业务与权限相关的用户角色菜单管理未做实现**
 
 #### 软件架构
 | 定位  | 技术栈               |
@@ -22,6 +24,16 @@ sunny-activiti是一个SpringBoot集成activiti实现在创建、部署流程、
 3.  修改application-dev.yml数据库的配置和redis配置
 4. 启动项目访问默认8080端口
 5. 登录用户名默认密码：123
+6. 用户级别关系图
+
+| 用户名  | 级别               |
+|-----|-------------------|
+| sunqi  | 最底层员工|
+| zhaoliu | 最底层员工             |
+| wangwu | sunqi和zhaoliu的直接上级领导      |
+| lisi | wangwu的直接上级领导      |
+| zhangsan| lisi的直接上级领导，最高领导|
+
 #### 项目截图
 - 视频演示
 链接：https://pan.baidu.com/s/1d6UF19OhmQcaCqERTkzsCQ
