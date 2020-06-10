@@ -21,7 +21,7 @@
 
 1.  idea或者eclipse下载项目自动从maven库下载依赖
 2.  创建数据库、安装redis
-3.  数据库脚本免费获取方式访问连接地址底部有说明: https://www.sunnyblog.top/index.html?typeId=1266297638089654272
+3.  数据库脚本免费获取方式访问连接地址底部有说明: [https://www.sunnyblog.top/detail.html?id=1268813477212848128](https://www.sunnyblog.top/detail.html?id=1268813477212848128)
 3.  修改application-dev.yml数据库的配置和redis配置
 4. 启动项目访问默认8080端口
 5. 登录用户名默认密码：123
