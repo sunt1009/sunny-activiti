@@ -36,6 +36,7 @@
 
 #### 数据库脚本获取
  **扫码进群发送项目star截图免费获得** 
+ **二维码过期通过博客首页添加私人微信截图项目star进群获取脚本并学习讨论:[https://www.sunnyblog.top/](https://www.sunnyblog.top/)** 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0619/163732_11d12544_806588.jpeg "1268813051394523136.jpg")
 
 #### 项目截图
