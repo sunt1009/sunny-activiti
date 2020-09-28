@@ -1,7 +1,7 @@
 # sunny-activiti
 
 #### 介绍
-1.  sunny-activiti是一个SpringBoot集成activiti实现在创建、部署流程、复制流程、删除流程以及流程规则配置，实现请假流程工作流流转和业务处理，感兴趣可以Watch、Start持续关注项目最新状态，文档和数据库脚本获取地址( **很重要，务必通过后面链接进入可以免费获取** )：[https://www.sunnyblog.top/detail.html?id=1268813477212848128](https://www.sunnyblog.top/detail.html?id=1268813477212848128)
+1.  sunny-activiti是一个SpringBoot集成activiti实现在创建、部署流程、复制流程、删除流程以及流程规则配置，实现请假流程工作流流转和业务处理，感兴趣可以Watch、Start持续关注项目最新状态，项目详细介绍地址：[https://www.sunnyblog.top/detail.html?id=1268813477212848128](https://www.sunnyblog.top/detail.html?id=1268813477212848128)
 2.  **本项目只实现activit流程相关的业务与权限相关的用户角色菜单管理未做实现**
 3. 增加通过页面动态控制定时任务的启动、暂停、创建、删除
 
@@ -20,10 +20,10 @@
 
 1.  idea或者eclipse下载项目自动从maven库下载依赖
 2.  创建数据库、安装redis
-3.  数据库脚本免费获取方式访问连接地址底部有说明: [https://www.sunnyblog.top/detail.html?id=1268813477212848128](https://www.sunnyblog.top/detail.html?id=1268813477212848128)
-3.  修改application-dev.yml数据库的配置和redis配置
+3.  数据库脚本免费获取方式访问:[https://www.sunnyblog.top/](https://www.sunnyblog.top/)添加私人微信并截图项目star 
+3.  修改application-dev.yml数据库的配置和redis配置为自己的配置
 4. 启动项目访问默认8080端口
-5. 登录用户名默认密码：123
+5.  **登录用户名默认密码：123** 
 6. 用户级别关系图
 
 | 用户名  | 级别               |
@@ -33,11 +33,6 @@
 | wangwu | sunqi和zhaoliu的直接上级领导      |
 | lisi | wangwu的直接上级领导      |
 | zhangsan| lisi的直接上级领导，最高领导|
-
-#### 数据库脚本获取
- **扫码进群发送项目star截图免费获得** 
- **二维码过期通过博客首页添加私人微信截图项目star进群获取脚本并学习讨论:[https://www.sunnyblog.top/](https://www.sunnyblog.top/)** 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0619/163732_11d12544_806588.jpeg "1268813051394523136.jpg")
 
 #### 项目截图
 - 视频演示
