@@ -1,7 +1,7 @@
 # sunny-activiti
 
 #### 介绍
-1.  sunny-activiti是一个SpringBoot集成activiti实现在创建、部署流程、复制流程、删除流程以及流程规则配置，实现请假流程工作流流转和业务处理，感兴趣可以Watch、Start持续关注项目最新状态，项目详细介绍地址：[https://www.sunnyblog.top/detail.html?id=1268813477212848128](https://www.sunnyblog.top/detail.html?id=1268813477212848128)
+1.  sunny-activiti是一个SpringBoot集成activiti实现在创建、部署流程、复制流程、删除流程以及流程规则配置，实现请假流程工作流流转和业务处理，感兴趣可以Watch、Start持续关注项目最新状态
 2.  **本项目只实现activit流程相关的业务与权限相关的用户角色菜单管理未做实现**
 3. 增加通过页面动态控制定时任务的启动、暂停、创建、删除
 
@@ -20,7 +20,8 @@
 
 1.  idea或者eclipse下载项目自动从maven库下载依赖
 2.  创建数据库、安装redis
-3.  数据库脚本免费获取方式访问:[https://www.sunnyblog.top/](https://www.sunnyblog.top/)添加私人微信并截图项目star 
+3.  数据库脚本以及Activiti最新视频教程和文档免费获取方式:添加私人微信并截图项目star即可获取
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1022/144320_2d727f7c_806588.jpeg "微信图片_20201022143603.jpg")
 3.  修改application-dev.yml数据库的配置和redis配置为自己的配置
 4. 启动项目访问默认8080端口
 5.  **登录用户名默认密码：123** 
@@ -55,6 +56,7 @@
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0610/111216_2c83c874_806588.png "屏幕截图.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0610/111233_31135d40_806588.png "屏幕截图.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0610/111248_4fbbebe6_806588.png "屏幕截图.png")
-#### 文档后续更新地址
-[文档更新地址](https://www.sunnyblog.top/index.html?typeId=1266297638089654272)
+#### 文档博客更新地址
+[文档更新地址](https://www.sunnyblog.top/index.html)
+ **博客服务器因特殊原因被初始化，暂时只恢复了部分数据和功能，目前处于关闭停服状态** 
 
