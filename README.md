@@ -22,6 +22,7 @@
 2.  创建数据库、安装redis
 3.   **数据库脚本以及Activiti最新视频教程和文档免费获取方式:添加私人微信并截图项目star即可获取** 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1022/144731_e26cd34a_806588.jpeg "微信图片_20201022143603.jpg")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1221/135902_1fadb8d5_806588.png "QQ截图20201221135804.png")
 3.  修改application-dev.yml数据库的配置和redis配置为自己的配置
 4. 启动项目访问默认8080端口
 5.  **登录用户名默认密码：123** 
