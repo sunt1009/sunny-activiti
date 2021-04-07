@@ -20,13 +20,12 @@
 
 1.  idea或者eclipse下载项目自动从maven库下载依赖
 2.  创建数据库、安装redis
-3.   **数据库脚本以及Activiti最新视频教程和文档免费获取方式:添加私人微信并截图项目star即可获取** 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1022/144731_e26cd34a_806588.jpeg "微信图片_20201022143603.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1221/135902_1fadb8d5_806588.png "QQ截图20201221135804.png")
 3.  修改application-dev.yml数据库的配置和redis配置为自己的配置
 4. 启动项目访问默认8080端口
 5.  **登录用户名默认密码：123** 
-6. 用户级别关系图
+6.  **用户级别关系图** 
+7.相关数据库脚本获取群公告
+![脚本及相关资料](https://images.gitee.com/uploads/images/2021/0407/170002_a7c4612b_806588.jpeg "qq群.jpg")
 
 | 用户名  | 级别               |
 |-----|-------------------|
@@ -34,7 +33,8 @@
 | zhaoliu | 最底层员工             |
 | wangwu | sunqi和zhaoliu的直接上级领导      |
 | lisi | wangwu的直接上级领导      |
-| zhangsan| lisi的直接上级领导，最高领导|
+| zhangsan| lisi的直接上级领导，最高领导(无需填写请假申请)|
+
 
 #### 项目截图
 - 视频演示
@@ -57,7 +57,4 @@
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0610/111216_2c83c874_806588.png "屏幕截图.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0610/111233_31135d40_806588.png "屏幕截图.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0610/111248_4fbbebe6_806588.png "屏幕截图.png")
-#### 文档博客更新地址
-[文档更新地址](https://www.sunnyblog.top/index.html)
- **博客服务器因特殊原因被初始化，暂时只恢复了部分数据和功能，目前处于关闭停服状态** 
 
