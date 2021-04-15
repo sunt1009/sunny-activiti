@@ -6,8 +6,9 @@
 1.  sunny-activiti是一个SpringBoot集成activiti实现在创建、部署流程、复制流程、删除流程以及流程规则配置，实现请假流程工作流流转和业务处理，感兴趣可以Watch、Start持续关注项目最新状态
 2.  **本项目只实现activit流程相关的业务与权限相关的用户角色菜单管理未做实现**
 3. 增加通过页面动态控制定时任务的启动、暂停、创建、删除
-4. 进群有需求的可以获取项目对应的文档资料
+4.  **进群有需求的可以获取项目对应的文档资料** 
 
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0415/111445_e2d5bfd4_806588.png "屏幕截图.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0414/085708_7ac59153_806588.png "屏幕截图.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0414/085802_90a082a5_806588.png "屏幕截图.png")
 
