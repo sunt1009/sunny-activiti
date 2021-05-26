@@ -44,6 +44,7 @@ public class ActivitiConfig {
         return processEngineConfiguration;
     }
 
+    // 记录流程日志
     @Bean
     public SpringProcessEngineConfiguration processEngineConfiguration(DataSource dataSource, PlatformTransactionManager manager){
         SpringProcessEngineConfiguration configuration =  new SpringProcessEngineConfiguration();
