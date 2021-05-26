@@ -16,5 +16,5 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface VacationOrderMapper extends BaseMapper<VacationOrder> {
 
-    Page<VacationOrderVo> queryVacationOrder(Page<VacationOrder> page,@Param("userId") String userId);
+    Page<VacationOrderVo> queryVacationOrder(Page<VacationOrder> page, @Param("userId") String userId);
 }

@@ -1,5 +1,6 @@
 package com.sunny.activiti.controller;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -103,12 +104,17 @@ public class ActivitiModelController {
     @RequestMapping("queryModelList")
     @ResponseBody
     public ResponseTableResult<List<Model>> queryModelList(HttpServletRequest request) {
-        int pageNo = Integer.valueOf(request.getParameter("page"));
-        int pageSize = Integer.valueOf(request.getParameter("limit"));
-        int firstResult = (pageNo-1)*pageSize;
-        long count = repositoryService.createModelQuery().count();
-        List<Model> list = repositoryService.createModelQuery().orderByCreateTime().desc().listPage(firstResult,pageSize);
-        return ResponseUtil.makeTableRsp(0,count,list);
+        try {
+            int pageNo = Integer.valueOf(request.getParameter("page"));
+            int pageSize = Integer.valueOf(request.getParameter("limit"));
+            int firstResult = (pageNo-1)*pageSize;
+            long count = repositoryService.createModelQuery().count();
+            List<Model> list = repositoryService.createModelQuery().orderByCreateTime().desc().listPage(firstResult,pageSize);
+            return ResponseUtil.makeTableRsp(0,count,list);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return ResponseUtil.makeTableRsp(ResultCode.FAIL.code,0,null);
+        }
     }
 
     /**
@@ -165,31 +171,36 @@ public class ActivitiModelController {
     @RequestMapping(value = "deployModel")
     @ResponseBody
     public ResponseResult<String> deployModel(HttpServletRequest request, RedirectAttributes redirectAttributes) throws IOException {
-        String modelId = request.getParameter("modelId");
-        if (StringUtils.isNoneBlank(modelId)) {
-            Model modelData = this.repositoryService.getModel(modelId);
-            ObjectNode modelNode = (ObjectNode) new ObjectMapper().readTree(repositoryService.getModelEditorSource(modelData.getId()));
-            byte[] bpmnBytes = null;
+        try {
+            String modelId = request.getParameter("modelId");
+            if (StringUtils.isNoneBlank(modelId)) {
+                Model modelData = this.repositoryService.getModel(modelId);
+                ObjectNode modelNode = (ObjectNode) new ObjectMapper().readTree(repositoryService.getModelEditorSource(modelData.getId()));
+                byte[] bpmnBytes = null;
 
-            BpmnModel model = new BpmnJsonConverter().convertToBpmnModel(modelNode);
-            bpmnBytes = new BpmnXMLConverter().convertToXML(model);
-            String processName = modelData.getName() + ".bpmn20.xml";
-            Deployment deployment = repositoryService.createDeployment().name(modelData.getName()).addString(processName, new String(bpmnBytes,"utf-8")).deploy();
-            modelData.setDeploymentId(deployment.getId());
-            repositoryService.saveModel(modelData);
-            redirectAttributes.addFlashAttribute("message", "部署成功，部署ID=" + deployment.getId());
-            //向流程定义表保存数据
-            FlowDef flowDef = new FlowDef();
-            List<Process> processes = model.getProcesses();
-            for (Process process : processes) {
-                flowDef.setFlowCode(process.getId());
-                flowDef.setFlowName(process.getName());
+                BpmnModel model = new BpmnJsonConverter().convertToBpmnModel(modelNode);
+                bpmnBytes = new BpmnXMLConverter().convertToXML(model);
+                String processName = modelData.getName() + ".bpmn20.xml";
+                Deployment deployment = repositoryService.createDeployment().name(modelData.getName()).addString(processName, new String(bpmnBytes,"utf-8")).deploy();
+                modelData.setDeploymentId(deployment.getId());
+                repositoryService.saveModel(modelData);
+                redirectAttributes.addFlashAttribute("message", "部署成功，部署ID=" + deployment.getId());
+                //向流程定义表保存数据
+                FlowDef flowDef = new FlowDef();
+                List<Process> processes = model.getProcesses();
+                for (Process process : processes) {
+                    flowDef.setFlowCode(process.getId());
+                    flowDef.setFlowName(process.getName());
+                }
+                flowInfoService.insertFlowDef(flowDef);
+
+                return ResponseUtil.makeOKRsp("部署成功");
             }
-            flowInfoService.insertFlowDef(flowDef);
-
-            return ResponseUtil.makeOKRsp("部署成功");
+            return ResponseUtil.makeErrRsp(ResultCode.NOT_FOUND.code,"系统异常,流程ID不存在");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseUtil.makeErrRsp(ResultCode.FAIL.code,"系统异常:" + ExceptionUtil.getMessage(e));
         }
-        return ResponseUtil.makeErrRsp(ResultCode.NOT_FOUND.code,"系统异常,流程ID不存在");
     }
 
     /**
@@ -200,12 +211,17 @@ public class ActivitiModelController {
     @RequestMapping("delModel")
     @ResponseBody
     public ResponseResult<String> delModel(HttpServletRequest request) {
-        String modelId = request.getParameter("modelId");
-        if(StrUtil.isBlank(modelId)) {
-            return ResponseUtil.makeErrRsp(ResultCode.NOT_FOUND.code,"流程ID不存在!");
+        try {
+            String modelId = request.getParameter("modelId");
+            if(StrUtil.isBlank(modelId)) {
+                return ResponseUtil.makeErrRsp(ResultCode.NOT_FOUND.code,"流程ID不存在!");
+            }
+            repositoryService.deleteModel(modelId);
+            return ResponseUtil.makeOKRsp("删除流程成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseUtil.makeErrRsp(ResultCode.FAIL.code,"系统异常:" + ExceptionUtil.getMessage(e));
         }
-        repositoryService.deleteModel(modelId);
-        return ResponseUtil.makeOKRsp("删除流程成功!");
     }
 
     /**

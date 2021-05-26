@@ -3,7 +3,9 @@ package com.sunny.activiti;
 
 import cn.hutool.core.collection.IterUtil;
 import cn.hutool.core.util.IdUtil;
+import com.sunny.activiti.service.ICacheService;
 import lombok.extern.slf4j.Slf4j;
+import org.activiti.engine.ManagementService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -37,7 +39,11 @@ public class TestActiviti {
     @Autowired
     private RuntimeService runtimeService;
     @Autowired
+    private ManagementService managementService;
+    @Autowired
     private TaskService taskService;
+    @Autowired
+    private ICacheService cacheService;
 
     /**
      * 查询流程
@@ -105,6 +111,11 @@ public class TestActiviti {
         String flowId = "1268068631334354944";
         Task task = taskService.createTaskQuery().processInstanceId(flowId).active().singleResult();
         log.info(task.getId() + ":" + task.getAssignee());
+    }
+
+
+    public void testResis() {
+
     }
 
 }

@@ -1,7 +1,6 @@
 package com.sunny.activiti.controller;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sunny.activiti.common.entity.*;
 import com.sunny.activiti.entity.FlowDef;
@@ -9,12 +8,13 @@ import com.sunny.activiti.entity.FlowRule;
 import com.sunny.activiti.entity.SysDict;
 import com.sunny.activiti.service.IFlowInfoService;
 import com.sunny.activiti.service.ISystemService;
-import org.activiti.engine.repository.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

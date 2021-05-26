@@ -49,7 +49,7 @@ public class PageController {
      */
     @GetMapping("/model/{page}")
     public String toModelPage(@PathVariable String page) {
-        return "model/" + page;
+        return "model" + File.separator + page;
     }
 
     /**
@@ -59,7 +59,7 @@ public class PageController {
      */
     @GetMapping("/page/{page}")
     public String toOtherPage(@PathVariable String page) {
-        return "page/" + page;
+        return "page" +  File.separator + page;
     }
 
 }

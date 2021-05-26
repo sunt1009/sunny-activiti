@@ -50,7 +50,7 @@ layui.use(['form','table'],function () {
     table.on('tool(currentTableFilter)', function (obj) {
         var data = obj.data;
         if (obj.event === 'edit') {
-            openWin('/modeler.html?modelId=' + data.id,'编辑流程',null);
+            openWin('/flow/addFlowRule?modelId=' + data.id,'编辑流程',null);
         } else if (obj.event === 'copy') {  // 监听复制操作
             openWin("/model/copyModel?modelId="+ data.id,'复制流程',null);
         }else if (obj.event === 'deploy') {  // 监听部署操作

@@ -8,7 +8,7 @@ layui.use(['form','table'],function () {
         url: '/vacation/queryList',
         toolbar: '#toolbarDemo',
         cols: [[
-            {field: 'userName', orderNo: '请假单编号'},
+            {field: 'orderNo', orderNo: '请假单编号'},
             {field: 'userName', title: '请假人'},
             {field: 'startTime', title: '请假开始时间'},
             {field: 'endTime', title: '请假结束时间'},

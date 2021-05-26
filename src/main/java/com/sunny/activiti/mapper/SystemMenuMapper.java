@@ -3,8 +3,6 @@ package com.sunny.activiti.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.sunny.activiti.entity.SystemMenu;
 
-import java.util.List;
-
 /**
  * <p>
  * 系统菜单表 Mapper 接口

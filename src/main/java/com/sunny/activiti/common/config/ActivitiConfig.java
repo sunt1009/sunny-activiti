@@ -2,10 +2,14 @@ package com.sunny.activiti.common.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import org.activiti.engine.impl.history.HistoryLevel;
+import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
+
+import javax.sql.DataSource;
 
 /**
  * @ClassName: ActivitiConfig
@@ -36,6 +40,21 @@ public class ActivitiConfig {
         processEngineConfiguration.setActivityFontName("宋体");
         processEngineConfiguration.setLabelFontName("宋体");
         processEngineConfiguration.setAnnotationFontName("宋体");
+      //  processEngineConfiguration.setEnableDatabaseEventLogging(true);
         return processEngineConfiguration;
+    }
+
+    @Bean
+    public SpringProcessEngineConfiguration processEngineConfiguration(DataSource dataSource, PlatformTransactionManager manager){
+        SpringProcessEngineConfiguration configuration =  new SpringProcessEngineConfiguration();
+        configuration.setDataSource(dataSource);
+        configuration.setTransactionManager(manager);
+        configuration.setAsyncExecutorActivate(true);
+        configuration.setHistoryLevel(HistoryLevel.FULL);
+        configuration.setDatabaseSchema("activity");
+        configuration.setDbHistoryUsed(true);
+        configuration.setDatabaseSchemaUpdate("true");
+        configuration.setEnableDatabaseEventLogging(true); //是否开启dblog
+        return configuration;
     }
 }
